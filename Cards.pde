@@ -6,6 +6,9 @@ ArrayList<Slot> SlotList = new ArrayList<Slot>();
 static final int KEYS = 0500;
 final boolean[] keysDown = new boolean[KEYS];
 
+float cardWid = 125;
+float cardHei = 200;
+
 int gameStatus = 0;
 int curSlot = 0;
 int curSlotMax = 5;
@@ -22,8 +25,20 @@ Hand player1Hand = new Hand();
 
 PShader toon;
 
+boolean small = true;
+
 void setup(){
-  size(1000,900,P2D);
+  if(!small){
+    size(1000,900,P2D);
+    cardWid = 125;
+    cardHei = 200;
+  }
+  if(small){
+    size(1000,700,P2D);
+    cardWid = 110;
+    cardHei = 170;
+  }
+
   rectMode(CENTER);
   textSize(16);
   
@@ -47,10 +62,12 @@ void setup(){
   int wid = 5;
   for(int i = 0; i < wid*2; i++){
     if(i < wid){
-      SlotList.add(new Slot(i,(i+1)*width/(wid+1),280));
+      //SlotList.add(new Slot(i,(i+1)*width/(wid+1),250));
+      SlotList.add(new Slot(i,(int)((i*cardWid)-cardWid*2+width/2),200));
     }
     else {
-      SlotList.add(new Slot(i,(i-wid+1)*width/(wid+1),500));
+      //SlotList.add(new Slot(i,(i-wid+1)*width/(wid+1),450));
+      SlotList.add(new Slot(i,(int)(((i-wid)*cardWid)-cardWid*2+width/2),(int)(200+cardHei)));
     }
   }
   
@@ -81,10 +98,10 @@ void draw(){
   
   fill(240,200,250);
   if(turn){
-    ellipse(50,200,50,50);
+    ellipse(50,280,50,50);
   }
   else{
-    ellipse(50,600,50,50);
+    ellipse(50,500,50,50);
   }
   
   if(gameStatus == 1){

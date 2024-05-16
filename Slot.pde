@@ -21,7 +21,7 @@ class Slot {
   public void Draw(){
     translate(x,y);
     fill(50,50,50,20);
-    rect(0,0,125,200);
+    rect(0,0,cardWid,cardHei);
     
     if(cardID != -1){
       this.card.Draw();

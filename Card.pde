@@ -25,18 +25,21 @@ class Card {
   public void Draw() {
     stroke(0, 0, 0);
     fill(CI.c);
-    rect(0, 0, 125, 200);
+    rect(0, 0, cardWid, cardHei);
     fill(CI.cc);
     textAlign(CENTER);
     textSize(16);
-    text(name, 0, -80);
+    text(name, 0, -cardHei/2+15);
     textSize(10);
-    text(description, 0, 55);
+    text(description, 0, cardHei/2-25);
     textSize(22);
     textAlign(LEFT);
-    text(atk, -55, 90);
+   
+    int cB = (int)(cardHei/2-7);
+    
+    text(atk, -cardWid/2+2, cB);
     textAlign(RIGHT);
-    text(curHP + "/" + maxHP, 55, 90);
+    text(curHP + "/" + maxHP, cardWid/2-2, cB);
     fill(255);
     noStroke();
   }
