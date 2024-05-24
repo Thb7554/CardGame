@@ -28,16 +28,18 @@ PShader toon;
 boolean small = true;
 
 void setup(){
+  int size = 900;
   if(!small){
-    size(1000,900,P2D);
+    size = 900;
     cardWid = 125;
     cardHei = 200;
   }
   if(small){
-    size(1000,700,P2D);
+    size = 700;
     cardWid = 110;
     cardHei = 170;
   }
+  size(1000,size,P2D);
 
   rectMode(CENTER);
   textSize(16);
