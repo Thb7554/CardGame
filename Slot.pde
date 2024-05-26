@@ -66,8 +66,15 @@ class Slot {
         player2HP -= this.card.atk;
       }
     }
-    
-    
   }
   
+  public int ClickSlot(){
+    if(mouseX > x - cardWid/2 && mouseX < x+cardWid/2 && mouseY > y - cardHei/2 && mouseY < y+cardHei/2){
+      fill(255,0,0);
+      rect(x,y,cardWid,cardHei);
+      return this.ID;
+    }
+    
+    return -1;
+  }
 }

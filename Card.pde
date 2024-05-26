@@ -7,6 +7,7 @@ class Card {
   int atk, maxHP, curHP;
 
   boolean playable;
+  boolean selected;
 
   public Card(String name, String description, int CIID) {
     this.name = name;
@@ -20,6 +21,7 @@ class Card {
     this.curHP = this.maxHP;
 
     this.playable = true;
+    this.selected = false;
   }
 
   public void Draw() {
@@ -115,6 +117,12 @@ class Card {
     textAlign(RIGHT);
     text(curHP + "/" + maxHP, 45, 75);
     fill(255);
+    
+    if(selected){
+      fill(255,255,255,80+60*sin(t*2));
+      rect(0, 0, 100, 160);
+      fill(255);
+    }
     noStroke();
   }
 }

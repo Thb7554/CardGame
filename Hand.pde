@@ -32,4 +32,24 @@ class Hand {
     }
     //translate(-width/2,0);
   }
+  
+  public int ClickCard(){
+    int cardID = -1;
+    for (int i = 0; i < cards.size(); i++) {
+      int x = (i+1)*width/(cards.size()+1);
+      int y = height-150;
+        
+      if(mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80){
+        fill(255,0,0);
+        rect(x,y,100,160);
+        this.cards.get(i).selected = true;
+        cardID = i;
+      }
+      else {
+        this.cards.get(i).selected = false;   
+      }
+      
+    }
+    return cardID;
+  }
 }

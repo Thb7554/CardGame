@@ -66,8 +66,8 @@ void main() {
 
 
 
-  float valG = val/2-valF-.4;
+  float valG = val/2-valF-.6;
 
   
-  gl_FragColor = vec4(valG+red*.5,valG+green*.5,valG+blue*.5,val/2+.5-valF/2);
+  gl_FragColor = vec4(valG+red*.6,valG+green*.6,valG+blue*.6,val/2+.5-valF/2+.1);
 }

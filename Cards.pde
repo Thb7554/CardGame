@@ -28,6 +28,7 @@ PShader toon;
 boolean small = true;
 
 void setup(){
+  size(5,5,P2D);
   int size = 900;
   if(!small){
     size = 900;
@@ -35,11 +36,11 @@ void setup(){
     cardHei = 200;
   }
   if(small){
-    size = 700;
+    size = 690;
     cardWid = 110;
     cardHei = 170;
   }
-  size(1000,size,P2D);
+  windowResize(1000,size);
 
   rectMode(CENTER);
   textSize(16);
@@ -100,10 +101,10 @@ void draw(){
   
   fill(240,200,250);
   if(turn){
-    ellipse(50,280,50,50);
+    ellipse(50,230,50,50);
   }
   else{
-    ellipse(50,500,50,50);
+    ellipse(50,350,50,50);
   }
   
   if(gameStatus == 1){
@@ -197,4 +198,11 @@ void ProcessKey(final int k, final boolean isDown){
 
 boolean isKeyDown(final int k) {
   return keysDown[k];
+}
+
+void mouseClicked(){
+  player1Hand.ClickCard();
+  for(int i = 0; i < SlotList.size(); i++){
+    SlotList.get(i).ClickSlot();
+  }
 }
