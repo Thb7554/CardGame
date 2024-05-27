@@ -25,7 +25,10 @@ Hand player1Hand = new Hand();
 
 PShader toon;
 
-boolean small = true;
+boolean small = false;
+
+boolean cardSelected = true;
+int cardID = -1;
 
 void setup(){
   size(5,5,P2D);
@@ -201,8 +204,22 @@ boolean isKeyDown(final int k) {
 }
 
 void mouseClicked(){
-  player1Hand.ClickCard();
-  for(int i = 0; i < SlotList.size(); i++){
-    SlotList.get(i).ClickSlot();
+  //PLACE CARD
+  if(cardSelected){
+    for(int i = 0; i < SlotList.size(); i++){
+      if(SlotList.get(i).ClickSlot() != -1){
+        SlotList.get(i).Set(player1Hand.cards.get(cardID).CIID);
+        player1Hand.cards.get(cardID).playable = false;
+        
+        print(i);
+      }
+    }
+  }
+  
+  cardID = player1Hand.ClickCard();
+  if(cardID != -1){
+    cardSelected = true;
+  }else{
+    cardSelected = false; 
   }
 }

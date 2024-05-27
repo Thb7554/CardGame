@@ -69,12 +69,14 @@ class Slot {
   }
   
   public int ClickSlot(){
+    int slotID = -1;
+    
     if(mouseX > x - cardWid/2 && mouseX < x+cardWid/2 && mouseY > y - cardHei/2 && mouseY < y+cardHei/2){
       fill(255,0,0);
       rect(x,y,cardWid,cardHei);
-      return this.ID;
+      slotID = ID;
     }
     
-    return -1;
+    return slotID;
   }
 }
