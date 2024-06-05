@@ -58,12 +58,12 @@ void setup(){
   CIList.add(new ColorIdentity("Black", color(200,180,200), color(40,5,40)));
   CIList.add(new ColorIdentity("Brown", color(240,220,150), color(80,60,0)));
   
-  CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.",0));
-  CardDatabase.add(new Card("Fountain", "Ocean calls.",1));
-  CardDatabase.add(new Card("Vineyard", "Tree.",2));
-  CardDatabase.add(new Card("Inn", "Heals.",3));
-  CardDatabase.add(new Card("Skeleton", "Rahhhhhh.",4));
-  CardDatabase.add(new Card("Lightning", "Shock shock.",5));
+  CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.",0,3,1));
+  CardDatabase.add(new Card("Fountain", "Ocean calls.",1,0,4));
+  CardDatabase.add(new Card("Vineyard", "Tree.",2,0,2));
+  CardDatabase.add(new Card("Inn", "Heals.",3,0,8));
+  CardDatabase.add(new Card("Skeleton", "Rahhhhhh.",4,2,2));
+  CardDatabase.add(new Card("Lightning", "Shock shock.",5,6,1));
   
   int wid = 5;
   for(int i = 0; i < wid*2; i++){
@@ -206,7 +206,7 @@ boolean isKeyDown(final int k) {
 void mouseClicked(){
   //PLACE CARD
   if(cardSelected){
-    for(int i = 0; i < SlotList.size(); i++){
+    for(int i = SlotList.size()/2; i < SlotList.size(); i++){
       if(SlotList.get(i).ClickSlot() != -1){
         SlotList.get(i).Set(player1Hand.cards.get(cardID).CIID);
         player1Hand.cards.get(cardID).playable = false;

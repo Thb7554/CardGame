@@ -22,6 +22,25 @@ class Card {
 
     this.playable = true;
     this.selected = false;
+    
+    print("OLD" + this.atk);
+  }
+  
+  public Card(String name, String description, int CIID, int ATK, int HP) {
+    this.name = name;
+    this.description = description;
+    this.CIID = CIID;
+    this.CI = CIList.get(CIID);
+
+    this.creature = true;
+    this.atk = ATK;
+    this.maxHP = HP;
+    this.curHP = this.maxHP;
+
+    this.playable = true;
+    this.selected = false;
+    
+    print("NEW" + this.atk);
   }
 
   public void Draw() {

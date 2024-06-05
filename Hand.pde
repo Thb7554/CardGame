@@ -7,7 +7,7 @@ class Hand {
 
   public void Set(int ID) {
     Card tempCard = CardDatabase.get(ID);
-    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID));
+    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP));
   }
 
   public void Draw() {
@@ -39,7 +39,7 @@ class Hand {
       int x = (i+1)*width/(cards.size()+1);
       int y = height-150;
         
-      if(mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80){
+      if(this.cards.get(i).playable && mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80){
         fill(255,0,0);
         rect(x,y,100,160);
         this.cards.get(i).selected = true;

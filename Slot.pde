@@ -15,7 +15,7 @@ class Slot {
   public void Set(int ID){
     cardID = ID;
     Card tempCard = CardDatabase.get(ID);
-    this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID);
+     this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP);
   }
   
   public void Draw(){
