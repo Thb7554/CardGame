@@ -73,7 +73,6 @@ class Card {
     //if(playable){
       rect(0, 0, 100, 160);
     //}
-   
 
     if (!playable) {
       toon.set("time", t);
@@ -152,7 +151,5 @@ class Card {
       fill(255);
     }
     noStroke();
-    
-
   }
 }

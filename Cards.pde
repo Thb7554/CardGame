@@ -29,7 +29,7 @@ PShader toon;
 
 boolean small = false;
 
-boolean cardSelected = true;
+boolean cardSelected = false;
 int cardID = -1;
 
 int turnButtonTimeout = 0;
@@ -63,6 +63,7 @@ void setup(){
   CIList.add(new ColorIdentity("Brown", color(240,220,150), color(80,60,0)));
   
   CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.",0,3,1,1));
+  CardDatabase.add(new Card("Flame Spitter", "-",0,0,2,2));
   CardDatabase.add(new Card("Fountain", "Ocean calls.",1,0,4,1));
   CardDatabase.add(new Card("Vineyard", "Tree.",2,0,2,1));
   CardDatabase.add(new Card("Inn", "Heals.",3,0,8,2));
@@ -222,12 +223,15 @@ void EndTurn(){
 
 void StartTurn(){
   if(!turn){
-    player1ManaList.get((int)random(0,player1ManaList.size())).number++;
+    for(int i=0; i<2; i++){
+      player1ManaList.get((int)random(0,player1ManaList.size())).number++;
+    }
   }
   else{
-    player2ManaList.get((int)random(0,player2ManaList.size())).number++;
+    for(int i=0; i<2; i++){
+      player2ManaList.get((int)random(0,player2ManaList.size())).number++;
+    }
   }
-  
 }
 
 //======================
@@ -254,8 +258,8 @@ void mouseClicked(){
   //PLACE CARD
   if(cardSelected){
     for(int i = SlotList.size()/2; i < SlotList.size(); i++){
-      if(SlotList.get(i).ClickSlot() != -1){
-        SlotList.get(i).Set(player1Hand.cards.get(cardID).CIID);
+      if(SlotList.get(i).ClickSlot(cardID) != -1){
+        SlotList.get(i).Set(player1Hand.cards.get(cardID));
         player1Hand.cards.get(cardID).playable = false;
       }
     }
@@ -263,6 +267,7 @@ void mouseClicked(){
   
   cardID = player1Hand.ClickCard();
   if(cardID != -1){
+    print(player1Hand.cards.get(cardID).name);
     cardSelected = true;
   }else{
     cardSelected = false; 

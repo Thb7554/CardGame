@@ -9,14 +9,13 @@ class Hand {
     Card tempCard = CardDatabase.get(ID);
     this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost));
   }
+  
+  public void Set(Card card) {
+    Card tempCard = card;
+    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost));
+  }
 
   public void Draw() {
-    //translate(width/2,0);
-    cards.get(2).playable = false;
-    cards.get(3).playable = false;
-    cards.get(4).playable = false;
-    cards.get(5).playable = false;
-
     for (int i = 0; i < cards.size(); i++) {
 
       int x = (i+1)*width/(cards.size()+1);
@@ -50,25 +49,6 @@ class Hand {
       }
       
     }
-    
-    if(cardID != -1) { cardID = CheckCost(cardID); }
-    
     return cardID;
-  }
-  
-  public int CheckCost(int cardID){
-    Card card = this.cards.get(cardID);
-    
-    for(int i = 0; i < player1ManaList.size(); i++){
-      if(card.CI == player1ManaList.get(i).CI){
-        if(card.cost <= player1ManaList.get(i).number){
-          player1ManaList.get(i).number -= card.cost;
-          
-          return cardID;
-        }
-      }
-    }
-    
-    return -1;
   }
 }

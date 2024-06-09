@@ -15,7 +15,12 @@ class Slot {
   public void Set(int ID){
     cardID = ID;
     Card tempCard = CardDatabase.get(ID);
-     this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+    this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+  }
+  
+  public void Set(Card card) {
+    print(card.name);
+    this.card = new Card(card.name, card.description, card.CIID, card.atk, card.maxHP,card.cost);
   }
   
   public void Draw(){
@@ -23,19 +28,19 @@ class Slot {
     fill(50,50,50,20);
     rect(0,0,cardWid,cardHei);
     
-    if(cardID != -1){
+    if(this.card != null){
       this.card.Draw();
     }
     
     translate(-x,-y);
   }
   
-  public void DrawAttack(float t){
-    fill(255,255,255);
-    stroke(255,255,255);
+  public void DrawAttack(float time){
+    fill(255,255,255,255*sin(time*PI/2));
+    stroke(255,255,255,255*sin(time*PI/2));
     strokeWeight(2);
     translate(x,y);
-    rect(0,0,cardWid,cardHei*t);
+    rect(0,cardHei/2,cardWid,2*cardHei*sin(time*PI/2));
     strokeWeight(1);
     noStroke();
     translate(-x,-y);
@@ -69,15 +74,38 @@ class Slot {
     }
   }
   
-  public int ClickSlot(){
+  public int ClickSlot(int cardID){
     int slotID = -1;
     
     if(mouseX > x - cardWid/2 && mouseX < x+cardWid/2 && mouseY > y - cardHei/2 && mouseY < y+cardHei/2){
       fill(255,0,0);
       rect(x,y,cardWid,cardHei);
       slotID = ID;
+      
+      //"Creature" only logic, doesnt allow cards that target occupied spaces
+      //           |
+      //           V
+      if (this.card != null || !CheckCost(cardID)){
+        return -1;
+      };   
     }
     
     return slotID;
+  }
+  
+  public boolean CheckCost(int cardID){
+    Card card = player1Hand.cards.get(cardID);
+    
+    for(int i = 0; i < player1ManaList.size(); i++){
+      if(card.CI == player1ManaList.get(i).CI){
+        if(card.cost <= player1ManaList.get(i).number){
+          player1ManaList.get(i).number = player1ManaList.get(i).number - card.cost;
+          
+          return true;
+        }
+      }
+    }
+    
+    return false;
   }
 }
