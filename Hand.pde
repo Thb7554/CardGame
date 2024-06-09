@@ -7,7 +7,7 @@ class Hand {
 
   public void Set(int ID) {
     Card tempCard = CardDatabase.get(ID);
-    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP));
+    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost));
   }
 
   public void Draw() {
@@ -50,6 +50,25 @@ class Hand {
       }
       
     }
+    
+    if(cardID != -1) { cardID = CheckCost(cardID); }
+    
     return cardID;
+  }
+  
+  public int CheckCost(int cardID){
+    Card card = this.cards.get(cardID);
+    
+    for(int i = 0; i < player1ManaList.size(); i++){
+      if(card.CI == player1ManaList.get(i).CI){
+        if(card.cost <= player1ManaList.get(i).number){
+          player1ManaList.get(i).number -= card.cost;
+          
+          return cardID;
+        }
+      }
+    }
+    
+    return -1;
   }
 }

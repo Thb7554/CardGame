@@ -11,11 +11,15 @@ class Mana {
     number = 0;
   }
   
-  public void Draw(int offset){
+  public void Draw(int xOff, int yOff){
+    stroke(CI.cc);
+    strokeWeight(2);
     fill(CI.c);
-    ellipse(x+offset,y+2*sin(t+offset),25,25);
+    ellipse(x+xOff,y+2*sin(t+xOff)+yOff,25,25);
+    strokeWeight(1);
+    noStroke();
     fill(CI.cc);
     textAlign(CENTER);
-    text(number,x+offset,y+2*sin(t+offset)+5);
+    text(number,x+xOff,y+2*sin(t+xOff)+7+yOff);
   }
 }

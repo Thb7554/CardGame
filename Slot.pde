@@ -15,7 +15,7 @@ class Slot {
   public void Set(int ID){
     cardID = ID;
     Card tempCard = CardDatabase.get(ID);
-     this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP);
+     this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
   }
   
   public void Draw(){
@@ -30,11 +30,14 @@ class Slot {
     translate(-x,-y);
   }
   
-  public void DrawAttack(int t){
-    fill(240,200,250);
+  public void DrawAttack(float t){
+    fill(255,255,255);
+    stroke(255,255,255);
+    strokeWeight(2);
     translate(x,y);
-    rect(0,0,50,t*4);
-    
+    rect(0,0,cardWid,cardHei*t);
+    strokeWeight(1);
+    noStroke();
     translate(-x,-y);
   }
   
@@ -46,8 +49,6 @@ class Slot {
   }
   
   public void Attack(int defenderID){
-    
-    
     Slot Defender = SlotList.get(defenderID);
     
     if(Defender.card != null){

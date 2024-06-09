@@ -6,6 +6,8 @@ class Card {
   boolean creature;
   int atk, maxHP, curHP;
 
+  int cost;
+
   boolean playable;
   boolean selected;
 
@@ -23,10 +25,10 @@ class Card {
     this.playable = true;
     this.selected = false;
     
-    print("OLD" + this.atk);
+    cost = 0;
   }
   
-  public Card(String name, String description, int CIID, int ATK, int HP) {
+  public Card(String name, String description, int CIID, int ATK, int HP, int Cost) {
     this.name = name;
     this.description = description;
     this.CIID = CIID;
@@ -40,7 +42,7 @@ class Card {
     this.playable = true;
     this.selected = false;
     
-    print("NEW" + this.atk);
+    this.cost = Cost;
   }
 
   public void Draw() {
@@ -137,11 +139,20 @@ class Card {
     text(curHP + "/" + maxHP, 45, 75);
     fill(255);
     
+    for(int i = 0; i < cost; i++){
+      fill(CI.cc);
+      ellipse(-25+(i+1)*50/(cost+1),-50,10,10);
+      fill(CI.c);
+      ellipse(-25+(i+1)*50/(cost+1),-50,7,7);
+    }
+    
     if(selected){
       fill(255,255,255,80+60*sin(t*2));
       rect(0, 0, 100, 160);
       fill(255);
     }
     noStroke();
+    
+
   }
 }

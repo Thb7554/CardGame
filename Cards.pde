@@ -2,7 +2,8 @@ ArrayList<ColorIdentity> CIList = new ArrayList<ColorIdentity>();
 ArrayList<Card> CardDatabase = new ArrayList<Card>();
 ArrayList<Card> CardList = new ArrayList<Card>();
 ArrayList<Slot> SlotList = new ArrayList<Slot>();
-ArrayList<Mana> ManaList = new ArrayList<Mana>();
+ArrayList<Mana> player1ManaList = new ArrayList<Mana>();
+ArrayList<Mana> player2ManaList = new ArrayList<Mana>();
 
 static final int KEYS = 0500;
 final boolean[] keysDown = new boolean[KEYS];
@@ -14,7 +15,7 @@ int gameStatus = 0;
 int curSlot = 0;
 int curSlotMax = 5;
 int slotAnimation = 0;
-int animationTime = 0;
+float animationTime = 0;
 float t = 0;
 
 boolean turn;
@@ -61,15 +62,17 @@ void setup(){
   CIList.add(new ColorIdentity("Black", color(200,180,200), color(40,5,40)));
   CIList.add(new ColorIdentity("Brown", color(240,220,150), color(80,60,0)));
   
-  CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.",0,3,1));
-  CardDatabase.add(new Card("Fountain", "Ocean calls.",1,0,4));
-  CardDatabase.add(new Card("Vineyard", "Tree.",2,0,2));
-  CardDatabase.add(new Card("Inn", "Heals.",3,0,8));
-  CardDatabase.add(new Card("Skeleton", "Rahhhhhh.",4,2,2));
-  CardDatabase.add(new Card("Lightning", "Shock shock.",5,6,1));
+  CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.",0,3,1,1));
+  CardDatabase.add(new Card("Fountain", "Ocean calls.",1,0,4,1));
+  CardDatabase.add(new Card("Vineyard", "Tree.",2,0,2,1));
+  CardDatabase.add(new Card("Inn", "Heals.",3,0,8,2));
+  CardDatabase.add(new Card("Skeleton", "Rahhhhhh.",4,2,2,1));
+  CardDatabase.add(new Card("Lightning", "Shock shock.",5,6,1,3));
   
-  ManaList.add(new Mana(CIList.get(0)));
-  ManaList.add(new Mana(CIList.get(1)));
+  player1ManaList.add(new Mana(CIList.get(0)));
+  player1ManaList.add(new Mana(CIList.get(1)));
+  
+  player2ManaList.add(new Mana(CIList.get(3)));
     
   int wid = 5;
   for(int i = 0; i < wid*2; i++){
@@ -95,6 +98,8 @@ void setup(){
   SlotList.get(0).Set(0);
   SlotList.get(5).Set(0);
   SlotList.get(6).Set(1);
+  
+  StartTurn();
 }
 
 void draw(){
@@ -130,9 +135,9 @@ void draw(){
     if(SlotList.get(curSlot).card != null && SlotList.get(curSlot).card.atk > 0) {
       if(slotAnimation == 0){
         SlotList.get(curSlot).DrawAttack(animationTime);
-        animationTime++;
+        animationTime+=.05;
         
-        if(animationTime > 25){
+        if(animationTime >= 1){
           animationTime = 0;
           slotAnimation = 1;
         }
@@ -171,8 +176,12 @@ void draw(){
   text(player1HP, width/2, 50);
   text(player2HP, width/2, height-50);
   
-  for(int i = 0; i < ManaList.size(); i++){
-    ManaList.get(i).Draw(i*30);
+  for(int i = 0; i < player1ManaList.size(); i++){
+    player1ManaList.get(i).Draw(i*30,0);
+  }
+  
+  for(int i = 0; i < player2ManaList.size(); i++){
+    player2ManaList.get(i).Draw(i*30,-400);
   }
   
   fill(0,0,0,200);
@@ -187,7 +196,7 @@ void processInput(){
 
   //Q
   if(isKeyDown(81) && turnButtonTimeout == 0){
-    turnButtonTimeout = 70;
+    turnButtonTimeout = 30;
     if(gameStatus == 0){//Main
       gameStatus = 1; //Combat
       
@@ -212,7 +221,13 @@ void EndTurn(){
 }
 
 void StartTurn(){
-  ManaList.get((int)random(0,ManaList.size())).number++;
+  if(!turn){
+    player1ManaList.get((int)random(0,player1ManaList.size())).number++;
+  }
+  else{
+    player2ManaList.get((int)random(0,player2ManaList.size())).number++;
+  }
+  
 }
 
 //======================
@@ -242,8 +257,6 @@ void mouseClicked(){
       if(SlotList.get(i).ClickSlot() != -1){
         SlotList.get(i).Set(player1Hand.cards.get(cardID).CIID);
         player1Hand.cards.get(cardID).playable = false;
-        
-        print(i);
       }
     }
   }
