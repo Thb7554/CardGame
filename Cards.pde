@@ -2,6 +2,7 @@ ArrayList<ColorIdentity> CIList = new ArrayList<ColorIdentity>();
 ArrayList<Card> CardDatabase = new ArrayList<Card>();
 ArrayList<Card> CardList = new ArrayList<Card>();
 ArrayList<Slot> SlotList = new ArrayList<Slot>();
+ArrayList<Mana> ManaList = new ArrayList<Mana>();
 
 static final int KEYS = 0500;
 final boolean[] keysDown = new boolean[KEYS];
@@ -30,6 +31,8 @@ boolean small = false;
 boolean cardSelected = true;
 int cardID = -1;
 
+int turnButtonTimeout = 0;
+
 void setup(){
   size(5,5,P2D);
   int size = 900;
@@ -43,7 +46,7 @@ void setup(){
     cardWid = 110;
     cardHei = 170;
   }
-  windowResize(1000,size);
+  windowResize(1200,size);
 
   rectMode(CENTER);
   textSize(16);
@@ -65,6 +68,9 @@ void setup(){
   CardDatabase.add(new Card("Skeleton", "Rahhhhhh.",4,2,2));
   CardDatabase.add(new Card("Lightning", "Shock shock.",5,6,1));
   
+  ManaList.add(new Mana(CIList.get(0)));
+  ManaList.add(new Mana(CIList.get(1)));
+    
   int wid = 5;
   for(int i = 0; i < wid*2; i++){
     if(i < wid){
@@ -94,9 +100,19 @@ void setup(){
 void draw(){
   noStroke();
   t += .04;
-  processInput();
   
-  background(250+5*sin(t/2));
+  if(turnButtonTimeout > 0){
+    turnButtonTimeout--; 
+  }
+  
+  processInput();
+  if(!turn){
+    background(250+5*sin(t/2));
+  }
+  else{
+    background(230+5*sin(t/2));
+  }
+  
   
   for(int i = 0; i < SlotList.size(); i++){
     SlotList.get(i).Draw();
@@ -133,16 +149,14 @@ void draw(){
         slotAnimation = 0;
       }
       if(curSlot > curSlotMax){
-        gameStatus = 0;
-        turn = !turn;
+        EndTurn();
       }
     }
     else
     {
       curSlot++;
       if(curSlot > curSlotMax){
-        gameStatus = 0;
-        turn = !turn;
+        EndTurn();
       }
     }
   }
@@ -157,7 +171,13 @@ void draw(){
   text(player1HP, width/2, 50);
   text(player2HP, width/2, height-50);
   
-  text(frameRate, width-20, 30);
+  for(int i = 0; i < ManaList.size(); i++){
+    ManaList.get(i).Draw(i*30);
+  }
+  
+  fill(0,0,0,200);
+  textAlign(RIGHT);
+  text(frameRate, width-10, 30);
 }
 
 //======================
@@ -166,9 +186,10 @@ void draw(){
 void processInput(){
 
   //Q
-  if(isKeyDown(81)){
-    if(gameStatus == 0){
-      gameStatus = 1;
+  if(isKeyDown(81) && turnButtonTimeout == 0){
+    turnButtonTimeout = 70;
+    if(gameStatus == 0){//Main
+      gameStatus = 1; //Combat
       
       if(turn){
         curSlot=0;
@@ -181,6 +202,17 @@ void processInput(){
     }
 
   }
+}
+
+void EndTurn(){
+  gameStatus = 0;
+  turn = !turn;
+  
+  StartTurn();
+}
+
+void StartTurn(){
+  ManaList.get((int)random(0,ManaList.size())).number++;
 }
 
 //======================
