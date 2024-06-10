@@ -10,7 +10,8 @@ class Card {
 
   boolean playable;
   boolean selected;
-
+  boolean hovering;
+  
   public Card(String name, String description, int CIID) {
     this.name = name;
     this.description = description;
@@ -60,9 +61,9 @@ class Card {
    
     int cB = (int)(cardHei/2-7);
     
-    text(atk, -cardWid/2+2, cB);
+    text(atk, -cardWid/2+4, cB);
     textAlign(RIGHT);
-    text(curHP + "/" + maxHP, cardWid/2-2, cB);
+    text(curHP + "/" + maxHP, cardWid/2-4, cB);
     fill(255);
     noStroke();
   }

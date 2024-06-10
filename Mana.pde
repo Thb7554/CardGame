@@ -3,7 +3,6 @@ class Mana {
   int number;
   ColorIdentity CI;
   
-  
   public Mana(ColorIdentity CI) {
     this.CI = CI;
     x = width-250;

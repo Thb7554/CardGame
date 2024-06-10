@@ -185,6 +185,24 @@ void draw(){
     player2ManaList.get(i).Draw(i*30,-400);
   }
   
+  fill(140,140,140);
+  ellipse(width-100,height/2+50,50,50);
+  textSize(46);
+  fill(0,0,0);
+  text("R",width-100,height/2+65);
+  fill(255,255,255);
+  text("R",width-100,height/2+63);
+  
+  fill(220,220,220);
+  rect(width-80,height/2+70,20,20);
+  textSize(20);
+  fill(0,0,0);
+  
+  text("2",width-80,height/2+75);
+  
+  textSize(24);  
+  
+  
   fill(0,0,0,200);
   textAlign(RIGHT);
   text(frameRate, width-10, 30);
@@ -197,7 +215,7 @@ void processInput(){
 
   //Q
   if(isKeyDown(81) && turnButtonTimeout == 0){
-    turnButtonTimeout = 30;
+    turnButtonTimeout = 50;
     if(gameStatus == 0){//Main
       gameStatus = 1; //Combat
       
@@ -209,8 +227,16 @@ void processInput(){
         curSlot=5;
         curSlotMax=9;
       }
+      return;
     }
-
+  }
+  
+  //R
+  else if(isKeyDown(82) && turnButtonTimeout == 0 && refreshHand() ){
+    turnButtonTimeout = 50;
+    for (int i = 0; i < player1Hand.cards.size(); i++) {
+      player1Hand.cards.get(i).playable = true;
+    }
   }
 }
 
@@ -232,6 +258,43 @@ void StartTurn(){
       player2ManaList.get((int)random(0,player2ManaList.size())).number++;
     }
   }
+}
+
+boolean refreshHand(){
+  ArrayList<Integer> nonZeroMana = new ArrayList<Integer>();
+  
+  for(int i = 0; i < player1ManaList.size(); i++){
+    if(player1ManaList.get(i).number > 0){
+      nonZeroMana.add(i);
+    }
+  }
+  
+  if(nonZeroMana.size() < 1){
+    return false;
+  }
+  
+  int chosenIndex = (int)random(0,nonZeroMana.size());
+  int manaIndex = nonZeroMana.get(chosenIndex);
+  player1ManaList.get(manaIndex).number--;
+  
+  nonZeroMana = new ArrayList<Integer>();
+  
+  for(int i = 0; i < player1ManaList.size(); i++){
+    if(player1ManaList.get(i).number > 0){
+      nonZeroMana.add(i);
+    }
+  }
+  
+  if(nonZeroMana.size() < 1){
+    player1ManaList.get(manaIndex).number++;
+    return false;
+  }
+  
+  chosenIndex = (int)random(0,nonZeroMana.size());
+  manaIndex = nonZeroMana.get(chosenIndex);
+  player1ManaList.get(manaIndex).number--;
+  
+  return true;
 }
 
 //======================
@@ -256,7 +319,7 @@ boolean isKeyDown(final int k) {
 
 void mouseClicked(){
   //PLACE CARD
-  if(cardSelected){
+  if(!turn && cardSelected){
     for(int i = SlotList.size()/2; i < SlotList.size(); i++){
       if(SlotList.get(i).ClickSlot(cardID) != -1){
         SlotList.get(i).Set(player1Hand.cards.get(cardID));
