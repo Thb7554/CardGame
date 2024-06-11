@@ -24,6 +24,7 @@ int player1HP = 40;
 int player2HP = 40;
 
 Hand player1Hand = new Hand();
+Hand player2Hand = new Hand();
 
 PShader toon;
 
@@ -87,13 +88,14 @@ void setup(){
     }
   }
   
-  player1Hand.Set((int)random(0,CardDatabase.size()));
-  player1Hand.Set((int)random(0,CardDatabase.size()));
-  player1Hand.Set((int)random(0,CardDatabase.size()));
-  player1Hand.Set((int)random(0,CardDatabase.size()));
-  player1Hand.Set((int)random(0,CardDatabase.size()));
-  player1Hand.Set((int)random(0,CardDatabase.size()));
-  player1Hand.Set((int)random(0,CardDatabase.size()));
+  //Set player hands
+  for(int i = 0; i < 7; i++){
+    player1Hand.Set((int)random(0,CardDatabase.size()));
+  }
+  
+  for(int i = 0; i < 7; i++){
+    player2Hand.Set(4);
+  }
   
   
   SlotList.get(0).Set(0);
@@ -127,6 +129,27 @@ void draw(){
   fill(240,200,250);
   if(turn){
     ellipse(50,230,50,50);
+    
+    for(int i = 0; i < 7; i++){
+      Card c = player2Hand.cards.get(i);
+      if(c.playable){
+        for(int j = 0; j < player2ManaList.size(); j++){
+          if(c.CI == player2ManaList.get(j).CI){
+            if(c.cost <= player2ManaList.get(j).number){
+              player2ManaList.get(j).number -= c.cost;
+              int randIndex = (int)random(0,5);
+              if(SlotList.get(randIndex).card == null){
+                SlotList.get(randIndex).Set(c);
+                c.playable = false;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    if(gameStatus == 0) { GoToCombat(); }
+    
   }
   else{
     ellipse(50,350,50,50);
@@ -216,19 +239,8 @@ void processInput(){
   //Q
   if(isKeyDown(81) && turnButtonTimeout == 0){
     turnButtonTimeout = 50;
-    if(gameStatus == 0){//Main
-      gameStatus = 1; //Combat
-      
-      if(turn){
-        curSlot=0;
-        curSlotMax=4;
-      }
-      else{
-        curSlot=5;
-        curSlotMax=9;
-      }
-      return;
-    }
+    GoToCombat();
+    return;
   }
   
   //R
@@ -236,6 +248,21 @@ void processInput(){
     turnButtonTimeout = 50;
     for (int i = 0; i < player1Hand.cards.size(); i++) {
       player1Hand.cards.get(i).playable = true;
+    }
+  }
+}
+
+void GoToCombat(){
+  if(gameStatus == 0){//Main
+    gameStatus = 1; //Combat
+    
+    if(turn){
+      curSlot=0;
+      curSlotMax=4;
+    }
+    else{
+      curSlot=5;
+      curSlotMax=9;
     }
   }
 }
