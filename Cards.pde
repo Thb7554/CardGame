@@ -70,6 +70,7 @@ void setup(){
   CardDatabase.add(new Card("Inn", "Heals.",3,0,8,2));
   CardDatabase.add(new Card("Skeleton", "Rahhhhhh.",4,2,2,1));
   CardDatabase.add(new Card("Lightning", "Shock shock.",5,6,1,3));
+  CardDatabase.add(new Card("Captain", "Big guy.",3,4,4,1));
   
   player1ManaList.add(new Mana(CIList.get(0)));
   player1ManaList.add(new Mana(CIList.get(1)));
@@ -94,7 +95,12 @@ void setup(){
   }
   
   for(int i = 0; i < 7; i++){
-    player2Hand.Set(4);
+    if(random(0,1) > .5){
+      player2Hand.Set(4);
+    }
+    else{
+      player2Hand.Set(7);
+    }
   }
   
   
@@ -130,23 +136,35 @@ void draw(){
   if(turn){
     ellipse(50,230,50,50);
     
-    for(int i = 0; i < 7; i++){
-      Card c = player2Hand.cards.get(i);
-      if(c.playable){
-        for(int j = 0; j < player2ManaList.size(); j++){
-          if(c.CI == player2ManaList.get(j).CI){
-            if(c.cost <= player2ManaList.get(j).number){
-              player2ManaList.get(j).number -= c.cost;
-              int randIndex = (int)random(0,5);
-              if(SlotList.get(randIndex).card == null){
-                SlotList.get(randIndex).Set(c);
-                c.playable = false;
+    if(gameStatus==0){
+      int rand = (int)random(0,6);
+      int max = rand-1;
+      if(rand == 0) { max = 6; }
+      
+      for(int i = rand; i != max; i++){
+        print("MAX " + max); 
+        print(i);
+        
+        Card c = player2Hand.cards.get(i);
+        if(c.playable){
+          for(int j = 0; j < player2ManaList.size(); j++){
+            if(c.CI == player2ManaList.get(j).CI){
+              if(c.cost <= player2ManaList.get(j).number){
+                int randIndex = (int)random(0,5);
+                if(SlotList.get(randIndex).card == null){
+                  player2ManaList.get(j).number -= c.cost;
+                  SlotList.get(randIndex).Set(c);
+                  c.playable = false;
+                }
               }
             }
           }
         }
+        if(i > 5){ i = -1;}
       }
     }
+    
+    
     
     if(gameStatus == 0) { GoToCombat(); }
     

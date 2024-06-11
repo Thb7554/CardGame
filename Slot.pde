@@ -36,11 +36,15 @@ class Slot {
   }
   
   public void DrawAttack(float time){
-    fill(255,255,255,255*sin(time*PI/2));
-    stroke(255,255,255,255*sin(time*PI/2));
+    fill(this.card.CI.c);
+    stroke(this.card.CI.cc);
     strokeWeight(2);
     translate(x,y);
-    rect(0,cardHei/2,cardWid,2*cardHei*sin(time*PI/2));
+    
+    int mod = 1;
+    if(!turn) { mod = -1; }
+    
+    rect(0,1.5*mod*cardHei*sin(time*PI/2)-mod*cardHei/2,cardWid,mod*cardHei*sin(time*PI/2));
     strokeWeight(1);
     noStroke();
     translate(-x,-y);
@@ -59,7 +63,7 @@ class Slot {
     if(Defender.card != null){
       Defender.card.curHP -= this.card.atk;
       
-      if(Defender.card.curHP < 0){
+      if(Defender.card.curHP <= 0){
         Defender.Die();
       }
       
