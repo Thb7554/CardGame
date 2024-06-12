@@ -7,10 +7,13 @@ class Card {
   int atk, maxHP, curHP;
 
   int cost;
+  boolean p1Owner = true;
 
   boolean playable;
   boolean selected;
   boolean hovering;
+  
+  ArrayList<Effect> effectList;
   
   public Card(String name, String description, int CIID) {
     this.name = name;
@@ -27,6 +30,7 @@ class Card {
     this.selected = false;
     
     cost = 0;
+    this.effectList = new ArrayList<Effect>();
   }
   
   public Card(String name, String description, int CIID, int ATK, int HP, int Cost) {
@@ -44,6 +48,7 @@ class Card {
     this.selected = false;
     
     this.cost = Cost;
+    this.effectList = new ArrayList<Effect>();
   }
 
   public void Draw() {

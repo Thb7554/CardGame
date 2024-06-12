@@ -64,7 +64,9 @@ void setup(){
   CIList.add(new ColorIdentity("Brown", color(240,220,150), color(80,60,0)));
   
   CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.",0,3,1,1));
-  CardDatabase.add(new Card("Flame Spitter", "-",0,0,2,2));
+  Card card_FlameSpitter = new Card("Flame Spitter", "-",0,0,2,2);
+  card_FlameSpitter.effectList.add(new effect_DamageOpponent(2));
+  CardDatabase.add(card_FlameSpitter);
   CardDatabase.add(new Card("Fountain", "Ocean calls.",1,0,4,1));
   CardDatabase.add(new Card("Vineyard", "Tree.",2,0,2,1));
   CardDatabase.add(new Card("Inn", "Heals.",3,0,8,2));
@@ -142,9 +144,6 @@ void draw(){
       if(rand == 0) { max = 6; }
       
       for(int i = rand; i != max; i++){
-        print("MAX " + max); 
-        print(i);
-        
         Card c = player2Hand.cards.get(i);
         if(c.playable){
           for(int j = 0; j < player2ManaList.size(); j++){
@@ -286,6 +285,18 @@ void GoToCombat(){
 }
 
 void EndTurn(){
+  for(int i = 0; i < 10; i++){
+    Card c = SlotList.get(i).card;
+    if(c != null){
+      for(int j = 0; j < c.effectList.size(); j++){
+        Effect e = c.effectList.get(j);
+        if(e.type == EffectType.ONEND){
+          e.Trigger(SlotList.get(i)); 
+        }      
+      }
+    }
+  }
+  
   gameStatus = 0;
   turn = !turn;
   

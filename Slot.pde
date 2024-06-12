@@ -16,11 +16,13 @@ class Slot {
     cardID = ID;
     Card tempCard = CardDatabase.get(ID);
     this.card = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+    this.card.effectList = card.effectList;  
   }
   
   public void Set(Card card) {
     print(card.name);
     this.card = new Card(card.name, card.description, card.CIID, card.atk, card.maxHP,card.cost);
+    this.card.effectList = card.effectList;
   }
   
   public void Draw(){

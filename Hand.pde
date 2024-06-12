@@ -7,12 +7,16 @@ class Hand {
 
   public void Set(int ID) {
     Card tempCard = CardDatabase.get(ID);
-    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost));
-  }
+    Card c = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+    c.effectList = tempCard.effectList;
+    this.cards.add(c); 
+}
   
   public void Set(Card card) {
     Card tempCard = card;
-    this.cards.add(new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost));
+    Card c = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+    c.effectList = tempCard.effectList;
+    this.cards.add(c); 
   }
 
   public void Draw() {
