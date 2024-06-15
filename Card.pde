@@ -12,9 +12,9 @@ class Card {
   boolean playable;
   boolean selected;
   boolean hovering;
-  
+
   ArrayList<Effect> effectList;
-  
+
   public Card(String name, String description, int CIID) {
     this.name = name;
     this.description = description;
@@ -28,11 +28,11 @@ class Card {
 
     this.playable = true;
     this.selected = false;
-    
+
     cost = 0;
     this.effectList = new ArrayList<Effect>();
   }
-  
+
   public Card(String name, String description, int CIID, int ATK, int HP, int Cost) {
     this.name = name;
     this.description = description;
@@ -46,7 +46,7 @@ class Card {
 
     this.playable = true;
     this.selected = false;
-    
+
     this.cost = Cost;
     this.effectList = new ArrayList<Effect>();
   }
@@ -63,13 +63,16 @@ class Card {
     text(description, 0, cardHei/2-25);
     textSize(22);
     textAlign(LEFT);
-   
+
     int cB = (int)(cardHei/2-7);
-    
+
     text(atk, -cardWid/2+4, cB);
     textAlign(RIGHT);
     text(curHP + "/" + maxHP, cardWid/2-4, cB);
+
     fill(255);
+
+
     noStroke();
   }
 
@@ -77,7 +80,7 @@ class Card {
     stroke(0, 0, 0);
     fill(CI.c);
     //if(playable){
-      rect(0, 0, 100, 160);
+    rect(0, 0, 100, 160);
     //}
 
     if (!playable) {
@@ -128,9 +131,9 @@ class Card {
     }
     fill(CI.c, 170);
     noStroke();
-    rect(0,72,100,22);
-    rect(0,-70,100,22);
-     
+    rect(0, 72, 100, 22);
+    rect(0, -70, 100, 22);
+
     fill(CI.cc);
     textAlign(CENTER);
     textSize(14);
@@ -143,16 +146,16 @@ class Card {
     textAlign(RIGHT);
     text(curHP + "/" + maxHP, 45, 75);
     fill(255);
-    
-    for(int i = 0; i < cost; i++){
+
+    for (int i = 0; i < cost; i++) {
       fill(CI.cc);
-      ellipse(-25+(i+1)*50/(cost+1),-50,10,10);
+      ellipse(-25+(i+1)*50/(cost+1), -50, 10, 10);
       fill(CI.c);
-      ellipse(-25+(i+1)*50/(cost+1),-50,7,7);
+      ellipse(-25+(i+1)*50/(cost+1), -50, 7, 7);
     }
-    
-    if(selected){
-      fill(255,255,255,80+60*sin(t*2));
+
+    if (selected) {
+      fill(255, 255, 255, 80+60*sin(t*2));
       rect(0, 0, 100, 160);
       fill(255);
     }
