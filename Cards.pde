@@ -5,6 +5,9 @@ ArrayList<Slot> SlotList = new ArrayList<Slot>();
 ArrayList<Mana> player1ManaList = new ArrayList<Mana>();
 ArrayList<Mana> player2ManaList = new ArrayList<Mana>();
 
+ArrayList<Trigger> TriggerList = new ArrayList<Trigger>();
+
+
 static final int KEYS = 0500;
 final boolean[] keysDown = new boolean[KEYS];
 
@@ -132,10 +135,18 @@ void draw() {
     background(230+5*sin(t/2));
   }
 
+  for (int i = 0; i < TriggerList.size(); i++) {
+    fill(250,220,100);
+    ellipse(40,15*(i+1),15,15);
+    fill(0,0,0);
+    text(TriggerList.get(i).slotID,40,15*(i+1));
+  }
 
   for (int i = 0; i < SlotList.size(); i++) {
     SlotList.get(i).Draw();
   }
+  
+  if(TriggerList.size() > 0) { TriggerList.remove(0); }
 
   fill(240, 200, 250);
   if (turn) {
@@ -332,9 +343,16 @@ void GoToCombat() {
 void MoveToEndPhase() {
   gameStatus = GameStatus.END;
 
+  TriggerList = new ArrayList<Trigger>();
+  for(int i = 0; i < 9; i++){
+    TriggerList.add(new Trigger("test", TriggerType.END,i));
+  }
+  
+
   if (turn) {
     curSlot=0;
     curSlotMax=4;
+    
   } else {
     curSlot=5;
     curSlotMax=9;
