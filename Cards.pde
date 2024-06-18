@@ -180,9 +180,20 @@ void draw() {
   }
 
   if (gameStatus == GameStatus.END) {
+    for(int i = curSlot; i < curSlotMax; i++){
+      fill(0,0,0);
+      ellipse(20,20*(i+1),25,15);
+      fill(255,255,255);
+      text(i,20,20*(i+1)+5);
+      
+    }
+    
+    
     if (SlotList.get(curSlot).card != null) {
       if (slotAnimation == 0) {
-        //SlotList.get(curSlot).DrawAttack(animationTime);
+        if(SlotList.get(curSlot).card.effectList.size()>0){
+           SlotList.get(curSlot).card.effectList.get(0).Draw(SlotList.get(curSlot));
+        }
         animationTime+=.05;
 
         if (animationTime >= 1) {
@@ -190,10 +201,8 @@ void draw() {
           slotAnimation = 1;
         }
       } else {
-        if (curSlot>4) {
-          SlotList.get(curSlot).card.effectList.get(0).Draw();
-        } else {
-          SlotList.get(curSlot).card.effectList.get(0).Draw();
+         if(SlotList.get(curSlot).card.effectList.size()>0){
+           SlotList.get(curSlot).card.effectList.get(0).Trigger(SlotList.get(curSlot));
         }
 
         curSlot++;

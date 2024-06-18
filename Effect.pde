@@ -8,7 +8,7 @@ abstract class Effect {
 
   public abstract void Trigger(Slot slot);
 
-  public abstract void Draw();
+  public abstract void Draw(Slot slot);
 }
 
 class effect_DamageOpponent extends Effect {
@@ -27,7 +27,8 @@ class effect_DamageOpponent extends Effect {
     }
   }
 
-  public void Draw() {
-    ellipse(0, 0, 100, 100);
+  public void Draw(Slot slot) {
+    fill(255,0,0);
+    ellipse(slot.x, slot.y, 100, 100);
   }
 }

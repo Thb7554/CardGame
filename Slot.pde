@@ -31,6 +31,9 @@ class Slot {
       this.card.Draw();
     }
 
+    fill(0,0,0,180);
+    text(ID,10,10);
+
     translate(-x, -y);
   }
 
