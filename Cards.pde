@@ -16,8 +16,8 @@ float cardHei = 200;
 
 enum GameStatus {
   MAIN,
-    COMBAT,
-    END
+  COMBAT,
+  END
 }
 
 GameStatus gameStatus = GameStatus.MAIN;
@@ -73,7 +73,7 @@ void setup() {
   CIList.add(new ColorIdentity("Brown", color(240, 220, 150), color(80, 60, 0)));
 
   CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
-  Card card_FlameSpitter = new Card("Flame Spitter", "-", 0, 0, 2, 2);
+  Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg at the end of turn.", 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2));
   CardDatabase.add(card_FlameSpitter);
   CardDatabase.add(new Card("Fountain", "Ocean calls.", 1, 0, 4, 1));
@@ -129,6 +129,7 @@ void draw() {
   }
 
   processInput();
+  
   if (!turn) {
     background(250+5*sin(t/2));
   } else {
@@ -140,13 +141,40 @@ void draw() {
     ellipse(40,15*(i+1),15,15);
     fill(0,0,0);
     text(TriggerList.get(i).slotID,40,15*(i+1));
+    
   }
+
+
 
   for (int i = 0; i < SlotList.size(); i++) {
     SlotList.get(i).Draw();
   }
   
-  if(TriggerList.size() > 0) { TriggerList.remove(0); }
+  if(TriggerList.size() > 0) { 
+    print("[" + TriggerList.get(0).name + "]");
+      
+    int triggeredSlotID = TriggerList.get(0).slotID;
+    Card triggeredCard = SlotList.get(triggeredSlotID).card;
+    
+    int e = 0;
+    
+    if(triggeredCard != null && triggeredCard.effectList.size() > 0){
+      if(e < triggeredCard.effectList.size()) {
+        triggeredCard.effectList.get(e).Trigger(triggeredSlotID);
+        print(triggeredCard.effectList.get(e).name);
+        e++;
+      }
+      
+      if(e >= triggeredCard.effectList.size()){
+        TriggerList.remove(0); 
+        e = 0;
+      }
+    }
+    else{
+      TriggerList.remove(0); 
+      e = 0;
+    }
+  }
 
   fill(240, 200, 250);
   if (turn) {
@@ -190,47 +218,6 @@ void draw() {
     ellipse(50, 350, 50, 50);
   }
 
-  if (gameStatus == GameStatus.END) {
-    for(int i = curSlot; i < curSlotMax; i++){
-      fill(0,0,0);
-      ellipse(20,20*(i+1),25,15);
-      fill(255,255,255);
-      text(i,20,20*(i+1)+5);
-      
-    }
-    
-    
-    if (SlotList.get(curSlot).card != null) {
-      if (slotAnimation == 0) {
-        if(SlotList.get(curSlot).card.effectList.size()>0){
-           SlotList.get(curSlot).card.effectList.get(0).Draw(SlotList.get(curSlot));
-        }
-        animationTime+=.05;
-
-        if (animationTime >= 1) {
-          animationTime = 0;
-          slotAnimation = 1;
-        }
-      } else {
-         if(SlotList.get(curSlot).card.effectList.size()>0){
-           SlotList.get(curSlot).card.effectList.get(0).Trigger(SlotList.get(curSlot));
-        }
-
-        curSlot++;
-        slotAnimation = 0;
-      }
-      if (curSlot > curSlotMax) {
-        EndTurn();
-      }
-    } else
-    {
-      curSlot++;
-      if (curSlot > curSlotMax) {
-        EndTurn();
-      }
-    }
-  }
-
 
   if (gameStatus == GameStatus.COMBAT) {
     if (SlotList.get(curSlot).card != null && SlotList.get(curSlot).card.atk > 0) {
@@ -253,13 +240,13 @@ void draw() {
         slotAnimation = 0;
       }
       if (curSlot > curSlotMax) {
-        MoveToEndPhase();
+        GoToEndPhase();
       }
     } else
     {
       curSlot++;
       if (curSlot > curSlotMax) {
-        MoveToEndPhase();
+        GoToEndPhase();
       }
     }
   }
@@ -303,6 +290,17 @@ void draw() {
   fill(0, 0, 0, 200);
   textAlign(RIGHT);
   text(frameRate, width-10, 30);
+  
+  if (gameStatus == GameStatus.END && TriggerList.size() == 0) {
+    EndTurn();
+    if(!turn){
+      print("| YOUR TURN |");
+    }
+    else{
+      print("| THEIR TURN |");
+    }
+    return;
+  }
 }
 
 //======================
@@ -340,12 +338,13 @@ void GoToCombat() {
   }
 }
 
-void MoveToEndPhase() {
+
+void GoToEndPhase() {
   gameStatus = GameStatus.END;
 
   TriggerList = new ArrayList<Trigger>();
   for(int i = 0; i < 9; i++){
-    TriggerList.add(new Trigger("test", TriggerType.END,i));
+    TriggerList.add(new Trigger(i + " end", TriggerType.END,i));
   }
   
 
@@ -464,7 +463,7 @@ void mouseClicked() {
 
   cardID = player1Hand.ClickCard();
   if (cardID != -1) {
-    print(player1Hand.cards.get(cardID).name);
+    //print(player1Hand.cards.get(cardID).name);
     cardSelected = true;
   } else {
     cardSelected = false;

@@ -68,7 +68,14 @@ class Card {
 
     text(atk, -cardWid/2+4, cB);
     textAlign(RIGHT);
-    text(curHP + "/" + maxHP, cardWid/2-4, cB);
+
+
+    if(curHP != maxHP){
+      text(curHP + "/" + maxHP, cardWid/2-4, cB);
+    }
+    else{
+      text(curHP, cardWid/2-4, cB);
+    }
 
     fill(255);
 
@@ -144,7 +151,12 @@ class Card {
     textAlign(LEFT);
     text(atk, -45, 75);
     textAlign(RIGHT);
-    text(curHP + "/" + maxHP, 45, 75);
+    if(curHP != maxHP){
+      text(curHP + "/" + maxHP, 45, 75);
+    }
+    else{
+      text(curHP, 45, 75);
+    }
     fill(255);
 
     for (int i = 0; i < cost; i++) {
