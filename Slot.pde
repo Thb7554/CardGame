@@ -20,6 +20,9 @@ class Slot {
     print(card.name);
     this.card = new Card(card.name, card.description, card.CIID, card.atk, card.maxHP, card.cost);
     this.card.effectList = card.effectList;
+    if(card.img != null){
+      this.card.img = card.img;
+    }
   }
 
   public void Draw() {
@@ -30,9 +33,12 @@ class Slot {
     if (this.card != null) {
       this.card.Draw();
     }
+    else{
+      fill(0,0,0,180);
+      text(ID,10,10); 
+    }
 
-    fill(0,0,0,180);
-    text(ID,10,10);
+
 
     translate(-x, -y);
   }

@@ -15,6 +15,8 @@ class Card {
 
   ArrayList<Effect> effectList;
 
+  PImage img;
+
   public Card(String name, String description, int CIID) {
     this.name = name;
     this.description = description;
@@ -51,17 +53,27 @@ class Card {
     this.effectList = new ArrayList<Effect>();
   }
 
+  public void SetImage(String fileName){
+    print("SETIMAGE " + fileName);
+    img = loadImage("images/" + fileName);
+  }
+
   public void Draw() {
     stroke(0, 0, 0);
     fill(CI.c);
     rect(0, 0, cardWid, cardHei);
     fill(CI.cc);
+    
+    if(img != null){
+      image(img, 0,-20,cardWid,cardWid);
+    }
+    
     textAlign(CENTER);
     textSize(16);
     text(name, 0, -cardHei/2+15);
     textSize(10);
-    text(description, 0, cardHei/2-25);
-    textSize(22);
+    text(description, 0, cardHei/2-35);
+    textSize(34);
     textAlign(LEFT);
 
     int cB = (int)(cardHei/2-7);
@@ -71,7 +83,10 @@ class Card {
 
 
     if(curHP != maxHP){
-      text(curHP + "/" + maxHP, cardWid/2-4, cB);
+      //text(curHP + "/" + maxHP, cardWid/2-4, cB);
+      text(curHP + " ", cardWid/2-8, cB);
+      textSize(14);
+      text("/" + maxHP, cardWid/2-4, cB);
     }
     else{
       text(curHP, cardWid/2-4, cB);
@@ -91,6 +106,8 @@ class Card {
     //}
 
     if (!playable) {
+      //NEED FASTER SHADER
+      /*
       toon.set("time", t);
       toon.set("wid", width);
       toon.set("hei", height);
@@ -98,7 +115,10 @@ class Card {
       toon.set("green", (float)green(CI.c)/255);
       toon.set("blue", (float)blue(CI.c)/255);
       shader(toon);
-
+      */
+      
+      fill(70,70,70);
+      
       rect(0, 0, 100, 160);
       resetShader();
       /*
@@ -140,6 +160,10 @@ class Card {
     noStroke();
     rect(0, 72, 100, 22);
     rect(0, -70, 100, 22);
+
+    if(img != null){
+      image(img, 0,-10,100,100);  
+    }
 
     fill(CI.cc);
     textAlign(CENTER);

@@ -14,6 +14,9 @@ class Hand {
     Card tempCard = card;
     Card c = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
     c.effectList = tempCard.effectList;
+    if(card.img != null){
+      c.img = card.img;
+    }
     this.cards.add(c);
   }
 

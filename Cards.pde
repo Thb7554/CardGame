@@ -60,10 +60,11 @@ void setup() {
   windowResize(1200, size);
 
   rectMode(CENTER);
-  textSize(16);
+  imageMode(CENTER);
+  textSize(16); 
 
-  toon = loadShader("ToonFrag.glsl");
-  toon.set("fraction", 1.0);
+  ///toon = loadShader("ToonFrag.glsl");
+  //toon.set("fraction", 1.0);
 
   CIList.add(new ColorIdentity("Red", color(255, 200, 200), color(120, 5, 0)));
   CIList.add(new ColorIdentity("Blue", color(230, 230, 255), color(5, 5, 100)));
@@ -75,13 +76,15 @@ void setup() {
   CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
   Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg at the end of turn.", 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2));
+  card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
   CardDatabase.add(new Card("Fountain", "Ocean calls.", 1, 0, 4, 1));
   CardDatabase.add(new Card("Vineyard", "Tree.", 2, 0, 2, 1));
   CardDatabase.add(new Card("Inn", "Heals.", 3, 0, 8, 2));
   CardDatabase.add(new Card("Skeleton", "Rahhhhhh.", 4, 2, 2, 1));
   CardDatabase.add(new Card("Lightning", "Shock shock.", 5, 6, 1, 3));
-  CardDatabase.add(new Card("Captain", "Big guy.", 3, 1, 5, 1));
+  CardDatabase.add(new Card("Captain", "Big guy.", 3, 0, 5, 1));
+  CardDatabase.add(new Card("Wave", "Wave calls.", 1, 1, 6, 2));
 
   player1ManaList.add(new Mana(CIList.get(0)));
   player1ManaList.add(new Mana(CIList.get(1)));
