@@ -20,7 +20,7 @@ class Slot {
     print(card.name);
     this.card = new Card(card.name, card.description, card.CIID, card.atk, card.maxHP, card.cost);
     this.card.effectList = card.effectList;
-    if(card.img != null){
+    if(card.img != null){ //<>//
       this.card.img = card.img;
     }
   }
@@ -35,6 +35,7 @@ class Slot {
     }
     else{
       fill(0,0,0,180);
+      textSize(24);
       text(ID,10,10); 
     }
 

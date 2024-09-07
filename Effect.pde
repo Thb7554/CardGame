@@ -3,6 +3,8 @@ abstract class Effect {
 
   String name;
 
+  Animation anim;
+
   public abstract void Trigger(Slot slot);
 
   public abstract void Trigger(int slotID);
@@ -17,6 +19,7 @@ class effect_DamageOpponent extends Effect {
     type = TriggerType.END;
     this.dmg = dmg;
     name = "effect_DamageOpponent";
+    anim = AnimationDatabase.get(0);
   }
 
   public void Trigger(Slot slot) {

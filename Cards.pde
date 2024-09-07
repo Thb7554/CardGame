@@ -1,18 +1,24 @@
 ArrayList<ColorIdentity> CIList = new ArrayList<ColorIdentity>();
+
 ArrayList<Card> CardDatabase = new ArrayList<Card>();
 ArrayList<Card> CardList = new ArrayList<Card>();
+
 ArrayList<Slot> SlotList = new ArrayList<Slot>();
+
 ArrayList<Mana> player1ManaList = new ArrayList<Mana>();
 ArrayList<Mana> player2ManaList = new ArrayList<Mana>();
 
 ArrayList<Trigger> TriggerList = new ArrayList<Trigger>();
 
+ArrayList<Animation> AnimationDatabase = new ArrayList<Animation>();
+ArrayList<Animation> AnimationList = new ArrayList<Animation>();
 
 static final int KEYS = 0500;
 final boolean[] keysDown = new boolean[KEYS];
 
 float cardWid = 125;
 float cardHei = 200;
+int ATC = 0;
 
 enum GameStatus {
   MAIN,
@@ -34,6 +40,8 @@ int player2HP = 40;
 
 Hand player1Hand = new Hand();
 Hand player2Hand = new Hand();
+
+int currentCardID = 0;
 
 PShader toon;
 
@@ -73,14 +81,23 @@ void setup() {
   CIList.add(new ColorIdentity("Black", color(200, 180, 200), color(40, 5, 40)));
   CIList.add(new ColorIdentity("Brown", color(240, 220, 150), color(80, 60, 0)));
 
+
+  AnimationDatabase.add(new flameSpitter_TargettedAnimation());
+
   CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
+  
   Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg at the end of turn.", 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2));
   card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
+  
   CardDatabase.add(new Card("Fountain", "Ocean calls.", 1, 0, 4, 1));
   CardDatabase.add(new Card("Vineyard", "Tree.", 2, 0, 2, 1));
-  CardDatabase.add(new Card("Inn", "Heals.", 3, 0, 8, 2));
+  
+  Card card_Inn = new Card("Inn", "Heals.", 3, 0, 8, 2);
+  card_Inn.SetImage("inn.png");
+  CardDatabase.add(card_Inn);
+  
   CardDatabase.add(new Card("Skeleton", "Rahhhhhh.", 4, 2, 2, 1));
   CardDatabase.add(new Card("Lightning", "Shock shock.", 5, 6, 1, 3));
   CardDatabase.add(new Card("Captain", "Big guy.", 3, 0, 5, 1));
@@ -103,9 +120,10 @@ void setup() {
   }
 
   //Set player hands
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < 6; i++) {
     player1Hand.Set(CardDatabase.get((int)random(0, CardDatabase.size())));
   }
+  player1Hand.Set(CardDatabase.get(1));
 
   for (int i = 0; i < 7; i++) {
     if (random(0, 1) > .5) {
@@ -153,6 +171,15 @@ void draw() {
     SlotList.get(i).Draw();
   }
   
+    if(AnimationList.size() > 0){
+      AnimationList.get(0).Draw(ATC);
+      ATC++;
+      if(ATC > AnimationList.get(0).maxFrame) { 
+        AnimationList.remove(0);
+        ATC = 0;
+      }
+    }
+  
   if(TriggerList.size() > 0) { 
     print("[" + TriggerList.get(0).name + "]");
       
@@ -161,10 +188,15 @@ void draw() {
     
     int e = 0;
     
-    if(triggeredCard != null && triggeredCard.effectList.size() > 0){
+    if(triggeredCard != null && triggeredCard.effectList.size() > 0 && ATC == 0){
       if(e < triggeredCard.effectList.size()) {
         triggeredCard.effectList.get(e).Trigger(triggeredSlotID);
         print(triggeredCard.effectList.get(e).name);
+        
+        
+        currentCardID = triggeredSlotID;
+        AnimationList.add(triggeredCard.effectList.get(e).anim);
+        
         e++;
       }
       
@@ -173,7 +205,7 @@ void draw() {
         e = 0;
       }
     }
-    else{
+    else if(ATC == 0){
       TriggerList.remove(0); 
       e = 0;
     }
@@ -211,8 +243,6 @@ void draw() {
         }
       }
     }
-
-
 
     if (gameStatus == GameStatus.MAIN) {
       GoToCombat();
@@ -294,7 +324,7 @@ void draw() {
   textAlign(RIGHT);
   text(frameRate, width-10, 30);
   
-  if (gameStatus == GameStatus.END && TriggerList.size() == 0) {
+  if (gameStatus == GameStatus.END && TriggerList.size() == 0 && AnimationList.size() == 0) {
     EndTurn();
     if(!turn){
       print("| YOUR TURN |");
@@ -346,7 +376,7 @@ void GoToEndPhase() {
   gameStatus = GameStatus.END;
 
   TriggerList = new ArrayList<Trigger>();
-  for(int i = 0; i < 9; i++){
+  for(int i = 0; i < 10; i++){
     TriggerList.add(new Trigger(i + " end", TriggerType.END,i));
   }
   
