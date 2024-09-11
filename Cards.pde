@@ -20,13 +20,22 @@ float cardWid = 125;
 float cardHei = 200;
 int ATC = 0;
 
+Button startGame; 
 enum GameStatus {
   MAIN,
   COMBAT,
   END
 }
 
+enum SystemStatus {
+  MENU,
+  GAME
+}
+
 GameStatus gameStatus = GameStatus.MAIN;
+
+SystemStatus systemStatus = SystemStatus.MENU;
+
 int curSlot = 0;
 int curSlotMax = 5;
 int slotAnimation = 0;
@@ -70,6 +79,9 @@ void setup() {
   rectMode(CENTER);
   imageMode(CENTER);
   textSize(16); 
+
+  startGame = new Button("Start Game", true, width/2,height/2,200,50);
+
 
   ///toon = loadShader("ToonFrag.glsl");
   //toon.set("fraction", 1.0);
@@ -145,11 +157,22 @@ void draw() {
   noStroke();
   t += .04;
 
+  processInput();
+  
+  if(systemStatus == SystemStatus.MENU){
+    background(150,250,150);
+    
+    startGame.Draw();
+    if(mousePressed && startGame.Click()){ 
+      systemStatus = SystemStatus.GAME;
+    }
+    
+    return; 
+  }
+  
   if (turnButtonTimeout > 0) {
     turnButtonTimeout--;
   }
-
-  processInput();
   
   if (!turn) {
     background(250+5*sin(t/2));
