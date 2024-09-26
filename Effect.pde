@@ -15,8 +15,8 @@ abstract class Effect {
 class effect_DamageOpponent extends Effect {
   int dmg;
 
-  public effect_DamageOpponent(int dmg) {
-    type = TriggerType.END;
+  public effect_DamageOpponent(int dmg, TriggerType triggerT) {
+    type = triggerT;
     this.dmg = dmg;
     name = "effect_DamageOpponent";
     anim = AnimationDatabase.get(0);

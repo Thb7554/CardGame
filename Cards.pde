@@ -22,7 +22,9 @@ int ATC = 0;
 
 Button startGame; 
 enum GameStatus {
-  MAIN,
+  OPENING,
+  START,
+  MAIN, //Player actions
   COMBAT,
   END
 }
@@ -98,10 +100,20 @@ void setup() {
 
   CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
   
-  Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg at the end of turn.", 0, 0, 2, 2);
-  card_FlameSpitter.effectList.add(new effect_DamageOpponent(2));
+  Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg to Opponent at the end of turn.", 0, 0, 2, 2);
+  card_FlameSpitter.effectList.add(new effect_DamageOpponent(2, TriggerType.ENDBOTH));
   card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
+  
+  Card card_Bright = new Card("Bright", "Deals 1 Dmg to Opponent at the start of your turn.", 0, 2, 1, 2);
+  card_Bright.effectList.add(new effect_DamageOpponent(1, TriggerType.START));
+  card_Bright.SetImage("bright.png");
+  CardDatabase.add(card_Bright);
+  
+  Card card_HellWall = new Card("Hell Wall", "Deals 3 Dmg to Opponent at the end of your turn.", 0, 0, 6, 4);
+  card_HellWall.effectList.add(new effect_DamageOpponent(3, TriggerType.END));
+  card_HellWall.SetImage("hellwall.png");
+  CardDatabase.add(card_HellWall);
   
   CardDatabase.add(new Card("Fountain", "Ocean calls.", 1, 0, 4, 1));
   CardDatabase.add(new Card("Vineyard", "Tree.", 2, 0, 2, 1));
@@ -145,11 +157,6 @@ void setup() {
     }
   }
 
-
-  SlotList.get(0).Set(CardDatabase.get(0));
-  SlotList.get(5).Set(CardDatabase.get(0));
-  SlotList.get(6).Set(CardDatabase.get(1));
-
   StartTurn();
 }
 
@@ -170,6 +177,11 @@ void draw() {
     return; 
   }
   
+  if(gameStatus == GameStatus.OPENING){
+    gameStatus = GameStatus.START;
+    return;
+  }
+  
   if (turnButtonTimeout > 0) {
     turnButtonTimeout--;
   }
@@ -185,7 +197,6 @@ void draw() {
     ellipse(40,15*(i+1),15,15);
     fill(0,0,0);
     text(TriggerList.get(i).slotID,40,15*(i+1));
-    
   }
 
 
@@ -203,36 +214,14 @@ void draw() {
       }
     }
   
-  if(TriggerList.size() > 0) { 
-    print("[" + TriggerList.get(0).name + "]");
-      
-    int triggeredSlotID = TriggerList.get(0).slotID;
-    Card triggeredCard = SlotList.get(triggeredSlotID).card;
-    
-    int e = 0;
-    
-    if(triggeredCard != null && triggeredCard.effectList.size() > 0 && ATC == 0){
-      if(e < triggeredCard.effectList.size()) {
-        triggeredCard.effectList.get(e).Trigger(triggeredSlotID);
-        print(triggeredCard.effectList.get(e).name);
-        
-        
-        currentCardID = triggeredSlotID;
-        AnimationList.add(triggeredCard.effectList.get(e).anim);
-        
-        e++;
-      }
-      
-      if(e >= triggeredCard.effectList.size()){
-        TriggerList.remove(0); 
-        e = 0;
-      }
-    }
-    else if(ATC == 0){
-      TriggerList.remove(0); 
-      e = 0;
-    }
+  if(gameStatus==GameStatus.END){
+    handlePhaseTriggers(TriggerType.END, TriggerType.ENDBOTH);
   }
+  
+  if(gameStatus==GameStatus.START){
+    handlePhaseTriggers(TriggerType.START, TriggerType.STARTBOTH); 
+  }
+  
 
   fill(240, 200, 250);
   if (turn) {
@@ -347,14 +336,20 @@ void draw() {
   textAlign(RIGHT);
   text(frameRate, width-10, 30);
   
-  if (gameStatus == GameStatus.END && TriggerList.size() == 0 && AnimationList.size() == 0) {
-    EndTurn();
+  if (gameStatus == GameStatus.START && TriggerList.size() == 0 && AnimationList.size() == 0) {
+    gameStatus = GameStatus.MAIN;
     if(!turn){
       print("| YOUR TURN |");
     }
     else{
       print("| THEIR TURN |");
     }
+    return;
+  }
+  
+  if (gameStatus == GameStatus.END && TriggerList.size() == 0 && AnimationList.size() == 0) {
+    EndTurn();
+
     return;
   }
 }
@@ -430,14 +425,14 @@ void EndTurn() {
    }
    }
    */
-
-  gameStatus = GameStatus.MAIN;
   turn = !turn;
 
   StartTurn();
 }
 
 void StartTurn() {
+  gameStatus = GameStatus.START;
+  
   if (!turn) {
     for (int i=0; i<2; i++) {
       player1ManaList.get((int)random(0, player1ManaList.size())).number++;
@@ -447,6 +442,54 @@ void StartTurn() {
       player2ManaList.get((int)random(0, player2ManaList.size())).number++;
     }
   }
+  
+  for(int i = 0; i < 10; i++){
+    TriggerList.add(new Trigger(i + " end", TriggerType.START,i));
+  }
+  
+}
+
+void handlePhaseTriggers(TriggerType friendly, TriggerType both){
+ if(TriggerList.size() > 0) { 
+    print("[" + TriggerList.get(0).name + "]");
+      
+    int triggeredSlotID = TriggerList.get(0).slotID;
+    Card triggeredCard = SlotList.get(triggeredSlotID).card;
+    
+    int e = 0;
+    
+    if(triggeredCard != null && triggeredCard.effectList.size() > 0 && ATC == 0){
+      if(e < triggeredCard.effectList.size()) {
+        TriggerType tempType = triggeredCard.effectList.get(e).type;
+        if(tempType == both || (tempType == friendly && friendlyTurn(triggeredSlotID)))
+        {
+          triggeredCard.effectList.get(e).Trigger(triggeredSlotID);
+          print(triggeredCard.effectList.get(e).name);
+          
+          currentCardID = triggeredSlotID;
+          AnimationList.add(triggeredCard.effectList.get(e).anim);
+        }
+        
+        e++;
+      }
+      
+      if(e >= triggeredCard.effectList.size()){
+        TriggerList.remove(0); 
+        e = 0;
+      }
+    }
+    else if(ATC == 0){
+      TriggerList.remove(0); 
+      e = 0;
+    }
+  } 
+}
+
+boolean friendlyTurn(int slotID){
+  if(slotID < 5 && turn || slotID >= 5 && !turn){
+    return true;
+  }
+  else return false;
 }
 
 boolean refreshHand() {

@@ -1,6 +1,8 @@
 enum TriggerType {
   END,
   ENDBOTH,
+  START,
+  STARTBOTH,
   DAMAGE,
   ATTACK
 }
