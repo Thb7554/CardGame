@@ -115,6 +115,11 @@ void setup() {
   card_HellWall.SetImage("hellwall.png");
   CardDatabase.add(card_HellWall);
   
+  Card card_BonFire = new Card("Bonfire", "Add 1 Red Mana at the end of your turn.", 0, 0, 4, 2);
+  card_BonFire.effectList.add(new effect_AddMana(3, 0, TriggerType.END));
+  //card_BonFire.SetImage("hellwall.png");
+  CardDatabase.add(card_BonFire);
+  
   CardDatabase.add(new Card("Fountain", "Ocean calls.", 1, 0, 4, 1));
   CardDatabase.add(new Card("Vineyard", "Tree.", 2, 0, 2, 1));
   
@@ -467,7 +472,9 @@ void handlePhaseTriggers(TriggerType friendly, TriggerType both){
           print(triggeredCard.effectList.get(e).name);
           
           currentCardID = triggeredSlotID;
-          AnimationList.add(triggeredCard.effectList.get(e).anim);
+          if(triggeredCard.effectList.get(e).anim != null){
+            AnimationList.add(triggeredCard.effectList.get(e).anim);
+          }
         }
         
         e++;
