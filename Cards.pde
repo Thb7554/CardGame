@@ -82,6 +82,9 @@ void setup() {
   imageMode(CENTER);
   textSize(16); 
 
+  TextArea tA = new TextArea("This is a test to see how this actually works.");
+  tA.CalcAndCut();
+
   startGame = new Button("Start Game", true, width/2,height/2,200,50);
 
 
@@ -335,6 +338,12 @@ void draw() {
   text("2", width-80, height/2+75);
 
   textSize(24);
+
+  for (int i = 0; i < player1Hand.cards.size(); i++) {
+    int cardX = (i+1)*width/(player1Hand.cards.size()+1);
+    int cardY = height-150;
+    player1Hand.cards.get(i).Hover(cardX,cardY);
+  }
 
 
   fill(0, 0, 0, 200);

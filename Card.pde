@@ -98,6 +98,40 @@ class Card {
     noStroke();
   }
 
+  public void Preview() {
+    translate(width/2,height/2);
+    stroke(0, 0, 0);
+    fill(CI.c);
+    //if(playable){
+    rect(0, 0, 400, 600);
+    fill(CI.cc);
+    textAlign(CENTER);
+    textSize(45);
+    text(name, 0, -250);
+    textSize(22);
+    text(description, 0, 205);
+    textSize(40);
+    textAlign(LEFT);
+    text(atk, -145, 250);
+    textAlign(RIGHT);
+    if(curHP != maxHP){
+      text(curHP + "/" + maxHP, 145, 250);
+    }
+    else{
+      text(curHP, 145, 250);
+    }
+    fill(255);
+
+    for (int i = 0; i < cost; i++) {
+      fill(CI.cc);
+      ellipse(-150+(i+1)*300/(cost+1), -200, 40, 40);
+      fill(CI.c);
+      ellipse(-150+(i+1)*300/(cost+1), -200, 25, 25);
+    }
+    
+    noStroke();
+  }
+
   public void SmallDraw(int x, int y) {
     stroke(0, 0, 0);
     fill(CI.c);
@@ -196,5 +230,11 @@ class Card {
       fill(255);
     }
     noStroke();
+  }
+  
+  public void Hover(int x, int y){
+    if (mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80) {
+      this.Preview();
+    }
   }
 }
