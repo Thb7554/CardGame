@@ -17,9 +17,14 @@ class Card {
 
   PImage img;
 
+  TextArea textArea;
+
   public Card(String name, String description, int CIID) {
     this.name = name;
+    
     this.description = description;
+    this.textArea = new TextArea(description);
+    
     this.CIID = CIID;
     this.CI = CIList.get(CIID);
 
@@ -31,13 +36,18 @@ class Card {
     this.playable = true;
     this.selected = false;
 
+
+
     cost = 0;
     this.effectList = new ArrayList<Effect>();
   }
 
   public Card(String name, String description, int CIID, int ATK, int HP, int Cost) {
     this.name = name;
+    
     this.description = description;
+    this.textArea = new TextArea(description);
+    
     this.CIID = CIID;
     this.CI = CIList.get(CIID);
 
@@ -100,6 +110,7 @@ class Card {
 
   public void Preview() {
     translate(width/2,height/2);
+
     stroke(0, 0, 0);
     fill(CI.c);
     //if(playable){
@@ -108,8 +119,8 @@ class Card {
     textAlign(CENTER);
     textSize(45);
     text(name, 0, -250);
-    textSize(22);
-    text(description, 0, 205);
+    //textSize(22);
+    //text(description, 0, 205);
     textSize(40);
     textAlign(LEFT);
     text(atk, -145, 250);
@@ -120,6 +131,13 @@ class Card {
     else{
       text(curHP, 145, 250);
     }
+    if((int)this.textArea.x != 0 && (int)this.textArea.x != 105){ //TEMPORARY CHECK PLEASE CHANGE
+      this.textArea.Resize(0,105,300,200);
+    }
+    
+    this.textArea.Draw();
+    
+    
     fill(255);
 
     for (int i = 0; i < cost; i++) {
@@ -129,6 +147,7 @@ class Card {
       ellipse(-150+(i+1)*300/(cost+1), -200, 25, 25);
     }
     
+
     noStroke();
   }
 

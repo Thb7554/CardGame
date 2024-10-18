@@ -63,9 +63,14 @@ int cardID = -1;
 
 int turnButtonTimeout = 0;
 
+
 void setup() {
   size(5, 5, P2D);
   int size = 900;
+  
+  PFont pfont = createFont("SansSerif", 128);
+  textFont(pfont);
+  
   if (!small) {
     size = 900;
     cardWid = 125;
@@ -80,14 +85,16 @@ void setup() {
 
   rectMode(CENTER);
   imageMode(CENTER);
-  textSize(16); 
-
-  TextArea tA = new TextArea("This is a test to see how this actually works.");
-  tA.CalcAndCut();
-
+  textSize(16);
+  
   startGame = new Button("Start Game", true, width/2,height/2,200,50);
 
-
+  String words = "start";
+  String[] list = split(words, ' ');
+  
+  // Writes the strings to a file, each on a separate line
+  saveStrings("data/debugLog.txt", list);
+  
   ///toon = loadShader("ToonFrag.glsl");
   //toon.set("fraction", 1.0);
 
