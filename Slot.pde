@@ -18,7 +18,7 @@ class Slot {
 
   public void Set(Card card) {
     print(card.name);
-    this.card = new Card(card.name, card.description, card.CIID, card.atk, card.maxHP, card.cost);
+    this.card = new Card(card.ID, card.name, card.description, card.CIID, card.atk, card.maxHP, card.cost);
     this.card.effectList = card.effectList;
     if(card.img != null){ //<>// //<>//
       this.card.img = card.img;
@@ -31,7 +31,7 @@ class Slot {
     rect(0, 0, cardWid, cardHei);
 
     if (this.card != null) {
-      this.card.Draw();
+      this.card.Draw(false);
     }
     else{
       fill(0,0,0,180);

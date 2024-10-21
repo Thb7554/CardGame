@@ -3,6 +3,8 @@ class Card {
   int CIID;
   ColorIdentity CI;
 
+  int ID;
+
   boolean creature;
   int atk, maxHP, curHP;
 
@@ -16,10 +18,13 @@ class Card {
   ArrayList<Effect> effectList;
 
   PImage img;
+  
+  int hoverTimer = 0;
 
   TextArea textArea;
 
-  public Card(String name, String description, int CIID) {
+  public Card(int ID, String name, String description, int CIID) {
+    this.ID = ID;
     this.name = name;
     
     this.description = description;
@@ -42,7 +47,8 @@ class Card {
     this.effectList = new ArrayList<Effect>();
   }
 
-  public Card(String name, String description, int CIID, int ATK, int HP, int Cost) {
+  public Card(int ID, String name, String description, int CIID, int ATK, int HP, int Cost) {
+    this.ID = ID;
     this.name = name;
     
     this.description = description;
@@ -68,7 +74,7 @@ class Card {
     img = loadImage("images/" + fileName);
   }
 
-  public void Draw() {
+  public void Draw(boolean showMana) {
     stroke(0, 0, 0);
     fill(CI.c);
     rect(0, 0, cardWid, cardHei);
@@ -77,6 +83,7 @@ class Card {
     if(img != null){
       image(img, 0,-20,cardWid,cardWid);
     }
+
     
     textAlign(CENTER);
     textSize(16);
@@ -104,18 +111,27 @@ class Card {
 
     fill(255);
 
+    if(showMana){
+      for (int i = 0; i < cost; i++) {
+        strokeWeight(1);
+        fill(CI.cc);
+        ellipse(-50+(i+1)*100/(cost+1), -70, 10, 10);
+        fill(CI.c);
+        ellipse(-50+(i+1)*100/(cost+1), -70, 8, 8);
+      }
+    }
 
     noStroke();
   }
 
-  public void Preview() {
+  public void Preview(int hoverTimer) {
     translate(width/2,height/2);
 
-    stroke(0, 0, 0);
-    fill(CI.c);
+    stroke(0, 0, 0, hoverTimer);
+    fill(CI.c, hoverTimer*2);
     //if(playable){
     rect(0, 0, 400, 600);
-    fill(CI.cc);
+    fill(CI.cc, hoverTimer);
     textAlign(CENTER);
     textSize(45);
     text(name, 0, -250);
@@ -135,15 +151,15 @@ class Card {
       this.textArea.Resize(0,105,300,200);
     }
     
-    this.textArea.Draw();
+    this.textArea.Draw(hoverTimer);
     
     
-    fill(255);
+    fill(255, hoverTimer*2);
 
     for (int i = 0; i < cost; i++) {
-      fill(CI.cc);
+      fill(CI.cc, hoverTimer*2);
       ellipse(-150+(i+1)*300/(cost+1), -200, 40, 40);
-      fill(CI.c);
+      fill(CI.c, hoverTimer*2);
       ellipse(-150+(i+1)*300/(cost+1), -200, 25, 25);
     }
     
@@ -252,8 +268,15 @@ class Card {
   }
   
   public void Hover(int x, int y){
+    
     if (mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80) {
-      this.Preview();
+      hoverTimer++;
+      if(hoverTimer > 40){
+        this.Preview(hoverTimer*3-120);
+      }
+    }
+    else{
+      hoverTimer = 0;
     }
   }
 }

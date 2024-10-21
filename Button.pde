@@ -40,12 +40,15 @@ class Button{
           print("# x+w" + (x + w) + "|" + mouseY + " #");
           print("# y+h" + (y + h) + "|" + mouseY + " #");
           
-          enabled = false;
+          //enabled = false;
           bColor = color(255,255,0);
           
   }
   
   public void Draw(){
+    if(hidden){
+      return; 
+    }
     if(centered){
       rectMode(CENTER); 
     }

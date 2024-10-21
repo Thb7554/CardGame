@@ -12,7 +12,7 @@ class Hand {
 
   public void Set(Card card) {
     Card tempCard = card;
-    Card c = new Card(tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+    Card c = new Card(tempCard.ID, tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
     c.effectList = tempCard.effectList;
     if(card.img != null){
       c.img = card.img;

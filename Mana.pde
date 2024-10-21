@@ -12,9 +12,9 @@ class Mana {
 
   public void Draw(int xOff, int yOff) {
     stroke(CI.cc);
-    strokeWeight(2);
+    strokeWeight(3);
     fill(CI.c);
-    ellipse(x+xOff, y+2*sin(t+xOff)+yOff, 25, 25);
+    ellipse(x+xOff, y+2*sin(t+xOff)+yOff, 27, 27);
     strokeWeight(1);
     noStroke();
     fill(CI.cc);

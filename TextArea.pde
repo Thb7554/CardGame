@@ -44,11 +44,11 @@ class TextArea {
    
   }
   
-  public void Draw(){
+  public void Draw(int hoverTimer){
     textAlign(LEFT);
-    fill(5,5,5,10);
+    fill(5,5,5,5);
     rect(x,y,w,h);
-    fill(50,50,50);
+    fill(50,50,50,hoverTimer);
     textSize(25);
     text(computedText, x-w/2+2,y-h/2+25);
   }
