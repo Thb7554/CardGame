@@ -20,19 +20,19 @@ float cardWid = 125;
 float cardHei = 200;
 int ATC = 0;
 
-Button startGame, editDeck, backToMenu; 
+Button startGame, editDeck, backToMenu;
 enum GameStatus {
   OPENING,
-  START,
-  MAIN, //Player actions
-  COMBAT,
-  END
+    START,
+    MAIN, //Player actions
+    COMBAT,
+    END
 }
 
 enum SystemStatus {
   MENU,
-  EDIT,
-  GAME
+    EDIT,
+    GAME
 }
 
 GameStatus gameStatus = GameStatus.MAIN;
@@ -71,10 +71,10 @@ ClickAndDrag CAD = new ClickAndDrag();
 void setup() {
   size(5, 5, P2D);
   int size = 900;
-  
+
   PFont pfont = createFont("SansSerif", 128);
   textFont(pfont);
-  
+
   if (!small) {
     size = 900;
     cardWid = 125;
@@ -90,17 +90,17 @@ void setup() {
   rectMode(CENTER);
   imageMode(CENTER);
   textSize(16);
-  
-  startGame = new Button("Start Game", true, width/2,height/2,200,50);
-  editDeck = new Button("Edit Deck", true, width/2,height/2+100,200,50);
-  backToMenu = new Button("Back to Menu", true, width/2,height/2-200,200,50);
-  
+
+  startGame = new Button("Start Game", true, width/2, height/2, 200, 50);
+  editDeck = new Button("Edit Deck", true, width/2, height/2+100, 200, 50);
+  backToMenu = new Button("Back to Menu", true, width/2, height/2-200, 200, 50);
+
   String words = "start";
   String[] list = split(words, ' ');
-  
+
   // Writes the strings to a file, each on a separate line
   saveStrings("data/debugLog.txt", list);
-  
+
   ///toon = loadShader("ToonFrag.glsl");
   //toon.set("fraction", 1.0);
 
@@ -110,38 +110,41 @@ void setup() {
   CIList.add(new ColorIdentity("White", color(255, 255, 250), color(50, 50, 50)));
   CIList.add(new ColorIdentity("Black", color(200, 180, 200), color(40, 5, 40)));
   CIList.add(new ColorIdentity("Brown", color(240, 220, 150), color(80, 60, 0)));
+  CIList.add(new ColorIdentity("Empty", color(100, 100, 100, 100), color(25, 25, 25, 150)));
 
   AnimationDatabase.add(new flameSpitter_TargettedAnimation());
 
-  CardDatabase.add(new Card(0,"Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
-  
+  CardDatabase.add(new Card(-1, "", "", 6, 0, 0, 0));
+
+  CardDatabase.add(new Card(0, "Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
+
   Card card_FlameSpitter = new Card(1, "Flame Spitter", "Deals 2 Dmg to Opponent at the end of turn.", 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2, TriggerType.ENDBOTH));
   card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
-  
+
   Card card_Bright = new Card(2, "Bright", "Deals 1 Dmg to Opponent at the start of your turn.", 0, 2, 1, 2);
   card_Bright.effectList.add(new effect_DamageOpponent(1, TriggerType.START));
   card_Bright.SetImage("bright.png");
   CardDatabase.add(card_Bright);
-  
+
   Card card_HellWall = new Card(3, "Hell Wall", "Deals 3 Dmg to Opponent at the end of your turn.", 0, 0, 6, 4);
   card_HellWall.effectList.add(new effect_DamageOpponent(3, TriggerType.END));
   card_HellWall.SetImage("hellwall.png");
   CardDatabase.add(card_HellWall);
-  
+
   Card card_BonFire = new Card(4, "Bonfire", "Add 1 Red Mana at the end of your turn.", 0, 0, 4, 2);
   card_BonFire.effectList.add(new effect_AddMana(3, 0, TriggerType.END));
   //card_BonFire.SetImage("hellwall.png");
   CardDatabase.add(card_BonFire);
-  
+
   CardDatabase.add(new Card(5, "Fountain", "Ocean calls.", 1, 0, 4, 1));
   CardDatabase.add(new Card(6, "Vineyard", "Tree.", 2, 0, 2, 1));
-  
+
   Card card_Inn = new Card(7, "Inn", "Heals.", 3, 0, 8, 2);
   card_Inn.SetImage("inn.png");
   CardDatabase.add(card_Inn);
-  
+
   CardDatabase.add(new Card(8, "Skeleton", "Rahhhhhh.", 4, 2, 2, 1));
   CardDatabase.add(new Card(9, "Lightning", "Shock shock.", 5, 6, 1, 3));
   CardDatabase.add(new Card(10, "Captain", "Big guy.", 3, 0, 5, 1));
@@ -164,10 +167,9 @@ void setup() {
   }
 
   //Set player hands
-  for (int i = 0; i < 6; i++) {
-    player1Hand.Set(CardDatabase.get(i));
+  for (int i = 0; i < 7; i++) {
+    player1Hand.Set(CardDatabase.get(0));
   }
-  player1Hand.Set(CardDatabase.get(1));
 
   for (int i = 0; i < 7; i++) {
     if (random(0, 1) > .5) {
@@ -185,118 +187,127 @@ void draw() {
   t += .04;
 
   processInput();
-  
+
   //-------------------------------------------------------------------------------------------MENU
-  if(systemStatus == SystemStatus.MENU){
-    background(150,250,150);
-    
+  if (systemStatus == SystemStatus.MENU) {
+    background(150, 250, 150);
+
     startGame.Draw();
     editDeck.Draw();
-    if(mousePressed && startGame.Click()){ 
+    if (mousePressed && startGame.Click()) {
       systemStatus = SystemStatus.GAME;
       backToMenu.hidden = true;
       startGame.hidden = true;
       editDeck.hidden = true;
     }
-    if(mousePressed && editDeck.Click()){ 
+    if (mousePressed && editDeck.Click()) {
       systemStatus = SystemStatus.EDIT;
       backToMenu.hidden = false;
       startGame.hidden = true;
       editDeck.hidden = true;
     }
-    
-    return; 
+
+    return;
   }
-  
+
   //-------------------------------------------------------------------------------------------EDIT
-  if(systemStatus == SystemStatus.EDIT){
-    background(150,150,250);
-    
+  if (systemStatus == SystemStatus.EDIT) {
+    background(150, 150, 250);
+
     backToMenu.Draw();
-    if(mousePressed && backToMenu.Click()){ 
+    if (mousePressed && backToMenu.Click()) {
       systemStatus = SystemStatus.MENU;
       backToMenu.hidden = true;
       startGame.hidden = false;
       editDeck.hidden = false;
     }
-    
-    if(mousePressed && !CAD.pressing){
+
+    if (mousePressed && !CAD.pressing) {
       CAD.ClickDown();
       CAD.pressing = true;
-    }
-    else if(mousePressed && CAD.pressing){
+    } else if (mousePressed && CAD.pressing) {
       CAD.ClickContinue();
-    }
-    else if(!mousePressed && CAD.pressing){
+    } else if (!mousePressed && CAD.pressing) {
       CAD.ClickEnd();
       CAD.pressing = false;
     }
-   
-    
 
-    
-    fill(0,0,0,60);
+    fill(0, 0, 0, 60);
     rect(width/2, height/2, width*2, 230);
-    translate(width/2,height/2);
+    translate(width/2, height/2);
+
+    translate(-600, 250);
     
-    translate(-500,250);
-    for (int i = 0; i < 6; i++) {
-      translate(145,0);
-      
-      player1Hand.cards.get(i).SmallDraw(0,0);
+    int[] IDList = new int[7];
+        
+    for (int i = 0; i < 7; i++) {
+      translate(150, 0);
+
+      player1Hand.cards.get(i).SmallDraw(0, 0);
       textAlign(CENTER);
-      fill(250,255,0);
-      rect(-50,-80,20,20);
-      fill(0,0,0);
-      text(player1Hand.cards.get(i).ID,-50,-75);
-      
+      if(player1Hand.cards.get(i).ID != -1){
+        fill(250, 255, 0);
+        rect(-50, -80, 20, 20);
+        fill(0, 0, 0);
+        text(player1Hand.cards.get(i).ID, -50, -75);
+      }
+      IDList[i] = player1Hand.cards.get(i).ID;
     }
-    translate(-6*145,0);
-    translate(500,-250);
+    translate(-7*150, 0);
+    translate(width/2, -250);
+
+    fill(255, 255, 255);
+    rect(0, 0, 150, 150);
+
+    translate(CAD.diffX, 0);
     
-    fill(255,255,255);
-    rect(0,0,150,150);
-    
-    translate(CAD.diffX,0);
-    
-   //CLICK AND DRAG FROM SCROLLING BAR INTO HAND GOODLUCK :)
-   if(mousePressed){
-      
-     int i = (int)((-CAD.diffX + mouseX-width/2 + 80)/145);
-     
-     //ellipse(i,20,140,140);
-     
-     if(i >= 0 && i < CardDatabase.size()){
-       print(" -" + CardDatabase.get(i).ID + "- ");
-     };
-     
-   }
+    //CLICK AND DRAG FROM SCROLLING BAR INTO HAND GOODLUCK :)
+    if (mousePressed) {
+      float i = ((-(float)CAD.diffX + mouseX-width/2 + 80)/145);
+
+      //ellipse(i,20,140,140);
+
+      if (i >= 0 && i < CardDatabase.size()) {
+        print(" -" + CardDatabase.get((int)i+1).ID + "- ");
+      };
+    }
+    else{
+      CAD.Reset(-145 * (CardDatabase.size()-1)+145,0);
+      CAD.Move();
+    }
 
     //translate(200*sin(t),0);
-    
-    for(int i =0; i < CardDatabase.size(); i++){
+
+    for (int i = 1; i < CardDatabase.size(); i++) {
       CardDatabase.get(i).Draw(true);
       textAlign(CENTER);
-      fill(250,255,0);
-      rect(-55,-105,40,30);
-      fill(0,0,0);
-      text(CardDatabase.get(i).ID,-55,-95);
-      translate(145,0);
+      fill(250, 255, 0);
+      
+      for (int j = 0; j < IDList.length; j++) {
+        if(IDList[j] == CardDatabase.get(i).ID){
+          fill(15,255,15);
+        }
+      }
+      
+      rect(-55, -115, 40, 30);
+      fill(0, 0, 0);
+      text(CardDatabase.get(i).ID, -55, -105);
+      translate(145, 0);
     }
-    
-    return; 
+
+    return;
   }
-  
+
   //-------------------------------------------------------------------------------------------GAME
-  if(gameStatus == GameStatus.OPENING){
+  if (gameStatus == GameStatus.OPENING) {
     gameStatus = GameStatus.START;
     return;
   }
-  
+
   if (turnButtonTimeout > 0) {
     turnButtonTimeout--;
   }
-  
+
   if (!turn) {
     background(250+5*sin(t/2));
   } else {
@@ -304,10 +315,10 @@ void draw() {
   }
 
   for (int i = 0; i < TriggerList.size(); i++) {
-    fill(250,220,100);
-    ellipse(40,15*(i+1),15,15);
-    fill(0,0,0);
-    text(TriggerList.get(i).slotID,40,15*(i+1));
+    fill(250, 220, 100);
+    ellipse(40, 15*(i+1), 15, 15);
+    fill(0, 0, 0);
+    text(TriggerList.get(i).slotID, 40, 15*(i+1));
   }
 
 
@@ -315,24 +326,24 @@ void draw() {
   for (int i = 0; i < SlotList.size(); i++) {
     SlotList.get(i).Draw();
   }
-  
-    if(AnimationList.size() > 0){
-      AnimationList.get(0).Draw(ATC);
-      ATC++;
-      if(ATC > AnimationList.get(0).maxFrame) { 
-        AnimationList.remove(0);
-        ATC = 0;
-      }
+
+  if (AnimationList.size() > 0) {
+    AnimationList.get(0).Draw(ATC);
+    ATC++;
+    if (ATC > AnimationList.get(0).maxFrame) {
+      AnimationList.remove(0);
+      ATC = 0;
     }
-  
-  if(gameStatus==GameStatus.END){
+  }
+
+  if (gameStatus==GameStatus.END) {
     handlePhaseTriggers(TriggerType.END, TriggerType.ENDBOTH);
   }
-  
-  if(gameStatus==GameStatus.START){
-    handlePhaseTriggers(TriggerType.START, TriggerType.STARTBOTH); 
+
+  if (gameStatus==GameStatus.START) {
+    handlePhaseTriggers(TriggerType.START, TriggerType.STARTBOTH);
   }
-  
+
 
   fill(240, 200, 250);
   if (turn) {
@@ -445,25 +456,24 @@ void draw() {
   for (int i = 0; i < player1Hand.cards.size(); i++) {
     int cardX = (i+1)*width/(player1Hand.cards.size()+1);
     int cardY = height-150;
-    player1Hand.cards.get(i).Hover(cardX,cardY);
+    player1Hand.cards.get(i).Hover(cardX, cardY);
   }
 
 
   fill(0, 0, 0, 200);
   textAlign(RIGHT);
   text(frameRate, width-10, 30);
-  
+
   if (gameStatus == GameStatus.START && TriggerList.size() == 0 && AnimationList.size() == 0) {
     gameStatus = GameStatus.MAIN;
-    if(!turn){
+    if (!turn) {
       print("| YOUR TURN |");
-    }
-    else{
+    } else {
       print("| THEIR TURN |");
     }
     return;
   }
-  
+
   if (gameStatus == GameStatus.END && TriggerList.size() == 0 && AnimationList.size() == 0) {
     EndTurn();
 
@@ -511,15 +521,14 @@ void GoToEndPhase() {
   gameStatus = GameStatus.END;
 
   TriggerList = new ArrayList<Trigger>();
-  for(int i = 0; i < 10; i++){
-    TriggerList.add(new Trigger(i + " end", TriggerType.END,i));
+  for (int i = 0; i < 10; i++) {
+    TriggerList.add(new Trigger(i + " end", TriggerType.END, i));
   }
-  
+
 
   if (turn) {
     curSlot=0;
     curSlotMax=4;
-    
   } else {
     curSlot=5;
     curSlotMax=9;
@@ -549,7 +558,7 @@ void EndTurn() {
 
 void StartTurn() {
   gameStatus = GameStatus.START;
-  
+
   if (!turn) {
     for (int i=0; i<2; i++) {
       player1ManaList.get((int)random(0, player1ManaList.size())).number++;
@@ -559,56 +568,53 @@ void StartTurn() {
       player2ManaList.get((int)random(0, player2ManaList.size())).number++;
     }
   }
-  
-  for(int i = 0; i < 10; i++){
-    TriggerList.add(new Trigger(i + " end", TriggerType.START,i));
+
+  for (int i = 0; i < 10; i++) {
+    TriggerList.add(new Trigger(i + " end", TriggerType.START, i));
   }
-  
 }
 
-void handlePhaseTriggers(TriggerType friendly, TriggerType both){
- if(TriggerList.size() > 0) { 
+void handlePhaseTriggers(TriggerType friendly, TriggerType both) {
+  if (TriggerList.size() > 0) {
     print("[" + TriggerList.get(0).name + "]");
-      
+
     int triggeredSlotID = TriggerList.get(0).slotID;
     Card triggeredCard = SlotList.get(triggeredSlotID).card;
-    
+
     int e = 0;
-    
-    if(triggeredCard != null && triggeredCard.effectList.size() > 0 && ATC == 0){
-      if(e < triggeredCard.effectList.size()) {
+
+    if (triggeredCard != null && triggeredCard.effectList.size() > 0 && ATC == 0) {
+      if (e < triggeredCard.effectList.size()) {
         TriggerType tempType = triggeredCard.effectList.get(e).type;
-        if(tempType == both || (tempType == friendly && friendlyTurn(triggeredSlotID)))
+        if (tempType == both || (tempType == friendly && friendlyTurn(triggeredSlotID)))
         {
           triggeredCard.effectList.get(e).Trigger(triggeredSlotID);
           print(triggeredCard.effectList.get(e).name);
-          
+
           currentCardID = triggeredSlotID;
-          if(triggeredCard.effectList.get(e).anim != null){
+          if (triggeredCard.effectList.get(e).anim != null) {
             AnimationList.add(triggeredCard.effectList.get(e).anim);
           }
         }
-        
+
         e++;
       }
-      
-      if(e >= triggeredCard.effectList.size()){
-        TriggerList.remove(0); 
+
+      if (e >= triggeredCard.effectList.size()) {
+        TriggerList.remove(0);
         e = 0;
       }
-    }
-    else if(ATC == 0){
-      TriggerList.remove(0); 
+    } else if (ATC == 0) {
+      TriggerList.remove(0);
       e = 0;
     }
-  } 
+  }
 }
 
-boolean friendlyTurn(int slotID){
-  if(slotID < 5 && turn || slotID >= 5 && !turn){
+boolean friendlyTurn(int slotID) {
+  if (slotID < 5 && turn || slotID >= 5 && !turn) {
     return true;
-  }
-  else return false;
+  } else return false;
 }
 
 boolean refreshHand() {
@@ -670,21 +676,21 @@ boolean isKeyDown(final int k) {
 
 void mouseClicked() {
   //PLACE CARD
-  if(systemStatus == SystemStatus.GAME){
-      for (int i = SlotList.size()/2; i < SlotList.size(); i++) {
-        if (SlotList.get(i).ClickSlot(cardID) != -1) {
-          SlotList.get(i).Set(player1Hand.cards.get(cardID));
-          player1Hand.cards.get(cardID).playable = false;
-        }
+  if (systemStatus == SystemStatus.GAME) {
+    for (int i = SlotList.size()/2; i < SlotList.size(); i++) {
+      if (SlotList.get(i).ClickSlot(cardID) != -1) {
+        SlotList.get(i).Set(player1Hand.cards.get(cardID));
+        player1Hand.cards.get(cardID).playable = false;
       }
-    
-  
-      cardID = player1Hand.ClickCard();
-      if (cardID != -1) {
-        //print(player1Hand.cards.get(cardID).name);
-        cardSelected = true;
-      } else {
-        cardSelected = false;
-      }
+    }
+
+
+    cardID = player1Hand.ClickCard();
+    if (cardID != -1) {
+      //print(player1Hand.cards.get(cardID).name);
+      cardSelected = true;
+    } else {
+      cardSelected = false;
+    }
   }
 }
