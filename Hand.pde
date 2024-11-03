@@ -19,6 +19,18 @@ class Hand {
     }
     this.cards.add(c);
   }
+  
+  public void Set(int ID, int index) {
+    Card card = CardDatabase.get(ID);
+    Card tempCard = card;
+    Card c = new Card(tempCard.ID, tempCard.name, tempCard.description, tempCard.CIID, tempCard.atk, tempCard.maxHP, tempCard.cost);
+    c.effectList = tempCard.effectList;
+    if(card.img != null){
+      c.img = card.img;
+    }
+    this.cards.set(index, c);
+  }
+  
 
   public void Draw() {
     for (int i = 0; i < cards.size(); i++) {

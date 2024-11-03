@@ -68,6 +68,8 @@ int editDeckHover = 0;
 
 ClickAndDrag CAD = new ClickAndDrag();
 
+int selectedCard = -1;
+
 void setup() {
   size(5, 5, P2D);
   int size = 900;
@@ -150,8 +152,8 @@ void setup() {
   CardDatabase.add(new Card(10, "Captain", "Big guy.", 3, 0, 5, 1));
   CardDatabase.add(new Card(11, "Wave", "Wave calls.", 1, 1, 6, 2));
 
-  player1ManaList.add(new Mana(CIList.get(0)));
-  player1ManaList.add(new Mana(CIList.get(1)));
+  //player1ManaList.add(new Mana(CIList.get(0)));
+  //player1ManaList.add(new Mana(CIList.get(1)));
 
   player2ManaList.add(new Mana(CIList.get(3)));
 
@@ -179,7 +181,7 @@ void setup() {
     }
   }
 
-  StartTurn();
+  //StartTurn();
 }
 
 void draw() {
@@ -195,7 +197,21 @@ void draw() {
     startGame.Draw();
     editDeck.Draw();
     if (mousePressed && startGame.Click()) {
+      
+      ArrayList colorID = new ArrayList<Integer>();
+      
+      for(int i = 0; i < player1Hand.cards.size(); i++){
+        int compare = player1Hand.cards.get(i).CIID;
+        
+        if(compare != 6 && !colorID.contains(compare)){
+          colorID.add(compare);
+          player1ManaList.add(new Mana(CIList.get(compare)));
+        }
+      }
+      
+      
       systemStatus = SystemStatus.GAME;
+      StartTurn();
       backToMenu.hidden = true;
       startGame.hidden = true;
       editDeck.hidden = true;
@@ -222,7 +238,7 @@ void draw() {
       editDeck.hidden = false;
     }
 
-    if (mousePressed && !CAD.pressing) {
+    if (mousePressed && mouseY < 600 && !CAD.pressing) {
       CAD.ClickDown();
       CAD.pressing = true;
     } else if (mousePressed && CAD.pressing) {
@@ -234,23 +250,27 @@ void draw() {
 
     fill(0, 0, 0, 60);
     rect(width/2, height/2, width*2, 230);
-    translate(width/2, height/2);
-
-    translate(-600, 250);
+    
+    translate(0, 250+height/2);
     
     int[] IDList = new int[7];
-        
+       
+
+       
     for (int i = 0; i < 7; i++) {
       translate(150, 0);
 
       player1Hand.cards.get(i).SmallDraw(0, 0);
       textAlign(CENTER);
+      
       if(player1Hand.cards.get(i).ID != -1){
         fill(250, 255, 0);
         rect(-50, -80, 20, 20);
         fill(0, 0, 0);
         text(player1Hand.cards.get(i).ID, -50, -75);
       }
+      
+      
       IDList[i] = player1Hand.cards.get(i).ID;
     }
     translate(-7*150, 0);
@@ -261,17 +281,36 @@ void draw() {
 
     translate(CAD.diffX, 0);
     
+    if (mousePressed && mouseY > 600) {
+      float i = (float)(mouseX-75)/150;
+      
+      if(i >= 0 && i < 7){
+        if(mouseButton == LEFT && selectedCard != -1){
+          player1Hand.Set(selectedCard, (int)(i));
+          selectedCard = -1;
+        }
+        if(mouseButton == RIGHT){
+          player1Hand.Set(0, (int)(i));
+        }
+      }
+    }
+    
+    
+    
+    
     //CLICK AND DRAG FROM SCROLLING BAR INTO HAND GOODLUCK :)
-    if (mousePressed) {
+    
+    if (mousePressed && mouseY < 600) {
       float i = ((-(float)CAD.diffX + mouseX-width/2 + 80)/145);
 
       //ellipse(i,20,140,140);
 
-      if (i >= 0 && i < CardDatabase.size()) {
+      if (i >= 0 && i < CardDatabase.size()-1) {
         print(" -" + CardDatabase.get((int)i+1).ID + "- ");
-      };
+        selectedCard = (int)i+1;
+      }
     }
-    else{
+    else if(!mousePressed){
       CAD.Reset(-145 * (CardDatabase.size()-1)+145,0);
       CAD.Move();
     }
@@ -281,6 +320,12 @@ void draw() {
     for (int i = 1; i < CardDatabase.size(); i++) {
       CardDatabase.get(i).Draw(true);
       textAlign(CENTER);
+      
+      if(selectedCard == i){
+        fill(240,240,240,100);
+        ellipse(0,0,150,200);
+      }
+      
       fill(250, 255, 0);
       
       for (int j = 0; j < IDList.length; j++) {
