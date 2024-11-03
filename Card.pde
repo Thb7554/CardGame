@@ -21,14 +21,16 @@ class Card {
   
   int hoverTimer = 0;
 
-  TextArea textArea;
+  TextArea textArea, smallTextArea;
 
   public Card(int ID, String name, String description, int CIID) {
     this.ID = ID;
     this.name = name;
     
     this.description = description;
-    this.textArea = new TextArea(description);
+    this.textArea = new TextArea(description,25,200,200,120,100);
+    
+    this.smallTextArea = new TextArea(description,12,0,10,110,80);
     
     this.CIID = CIID;
     this.CI = CIList.get(CIID);
@@ -52,7 +54,9 @@ class Card {
     this.name = name;
     
     this.description = description;
-    this.textArea = new TextArea(description);
+    this.textArea = new TextArea(description,25,200,200,120,100);
+    
+    this.smallTextArea = new TextArea(description,12,0,10,110,80);
     
     this.CIID = CIID;
     this.CI = CIList.get(CIID);
@@ -88,8 +92,11 @@ class Card {
     textAlign(CENTER);
     textSize(16);
     text(name, 0, -cardHei/2+15);
-    textSize(10);
-    text(description, 0, cardHei/2-35);
+    
+    smallTextArea.Draw();
+    
+    //textSize(10);
+    //text(description, 0, cardHei/2-35);
     textSize(34);
     textAlign(LEFT);
 
@@ -269,14 +276,14 @@ class Card {
   
   public void Hover(int x, int y){
     
-    if (mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80) {
+    //if (mouseX < x + 50 && mouseX > x - 50 && mouseY > y-80 && mouseY < y+80) { //GROSS
       hoverTimer++;
       if(hoverTimer > 40){
         this.Preview(hoverTimer*3-120);
       }
-    }
-    else{
-      hoverTimer = 0;
-    }
+    //}
+    //else{
+    //  hoverTimer = 0;
+    //}
   }
 }

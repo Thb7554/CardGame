@@ -5,6 +5,10 @@ class Button{
   Boolean hidden = false;
   Boolean centered;
   
+  Boolean widthAnchor = false;
+  Boolean heightAnchor = false;
+  
+  
   color bColor = color(255,255,255);
   
   public Button(String bText, Boolean centered, int x, int y, int w, int h){
@@ -41,8 +45,7 @@ class Button{
           print("# y+h" + (y + h) + "|" + mouseY + " #");
           
           //enabled = false;
-          bColor = color(255,255,0);
-          
+          bColor = color(255,255,0);   
   }
   
   public void Draw(){
@@ -61,5 +64,4 @@ class Button{
     textAlign(CENTER);
     text(bText,x,y);
   }
-  
 }

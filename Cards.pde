@@ -70,6 +70,9 @@ ClickAndDrag CAD = new ClickAndDrag();
 
 int selectedCard = -1;
 
+
+int tijiWidth, tijiHeight;
+
 void setup() {
   size(5, 5, P2D);
   int size = 900;
@@ -92,6 +95,10 @@ void setup() {
   rectMode(CENTER);
   imageMode(CENTER);
   textSize(16);
+
+  tijiWidth = width;
+  tijiHeight = height;
+
 
   startGame = new Button("Start Game", true, width/2, height/2, 200, 50);
   editDeck = new Button("Edit Deck", true, width/2, height/2+100, 200, 50);
@@ -185,6 +192,18 @@ void setup() {
 }
 
 void draw() {
+  if(tijiWidth != width || tijiWidth != height){
+    startGame.x = width/2;
+    startGame.y = height/2;
+    
+    editDeck.x = width/2;
+    editDeck.y = height/2+100;
+    
+    backToMenu.x = width/2;
+    backToMenu.y = height/2-200;
+  }
+  
+  
   noStroke();
   t += .04;
 
@@ -251,14 +270,15 @@ void draw() {
     fill(0, 0, 0, 60);
     rect(width/2, height/2, width*2, 230);
     
-    translate(0, 250+height/2);
+    translate(width/2, 250+height/2);
     
     int[] IDList = new int[7];
        
 
-       
+    translate(-3.5*150+75,0);
+    
     for (int i = 0; i < 7; i++) {
-      translate(150, 0);
+      
 
       player1Hand.cards.get(i).SmallDraw(0, 0);
       textAlign(CENTER);
@@ -270,19 +290,25 @@ void draw() {
         text(player1Hand.cards.get(i).ID, -50, -75);
       }
       
-      
       IDList[i] = player1Hand.cards.get(i).ID;
+      
+      translate(150, 0);
     }
-    translate(-7*150, 0);
-    translate(width/2, -250);
+    translate(-3.5*150-75, 0);
+    translate(0, -250);
 
     fill(255, 255, 255);
     rect(0, 0, 150, 150);
 
     translate(CAD.diffX, 0);
     
-    if (mousePressed && mouseY > 600) {
+
+    
+    //THIS SHIT IS BUSTED FIX IT (LATER)
+    if (mousePressed && mouseY > width/2+50) { //<----- find out why this doesnt accuraelteltely work at different resolutions
       float i = (float)(mouseX-75)/150;
+      
+      print("xX" + (int)i + "Xx");
       
       if(i >= 0 && i < 7){
         if(mouseButton == LEFT && selectedCard != -1){
@@ -300,7 +326,7 @@ void draw() {
     
     //CLICK AND DRAG FROM SCROLLING BAR INTO HAND GOODLUCK :)
     
-    if (mousePressed && mouseY < 600) {
+    if (mousePressed && mouseY < width/2+50) {
       float i = ((-(float)CAD.diffX + mouseX-width/2 + 80)/145);
 
       //ellipse(i,20,140,140);
@@ -501,7 +527,12 @@ void draw() {
   for (int i = 0; i < player1Hand.cards.size(); i++) {
     int cardX = (i+1)*width/(player1Hand.cards.size()+1);
     int cardY = height-150;
-    player1Hand.cards.get(i).Hover(cardX, cardY);
+    if (mouseX < cardX + 50 && mouseX > cardX - 50 && mouseY > cardY-80 && mouseY < cardY+80){
+      player1Hand.cards.get(i).Hover(cardX, cardY);
+    }
+    else{
+      player1Hand.cards.get(i).hoverTimer = 0;
+    }
   }
 
 
@@ -699,6 +730,10 @@ boolean refreshHand() {
   return true;
 }
 
+void Resized(){
+  
+}
+
 //======================
 //KEY PROCESSING WHATEVER
 //======================
@@ -721,7 +756,7 @@ boolean isKeyDown(final int k) {
 
 void mouseClicked() {
   //PLACE CARD
-  if (systemStatus == SystemStatus.GAME) {
+  if (systemStatus == SystemStatus.GAME && gameStatus == GameStatus.MAIN) {
     for (int i = SlotList.size()/2; i < SlotList.size(); i++) {
       if (SlotList.get(i).ClickSlot(cardID) != -1) {
         SlotList.get(i).Set(player1Hand.cards.get(cardID));

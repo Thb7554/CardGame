@@ -3,12 +3,15 @@ class TextArea {
   String strText;
   String computedText = "";
   String[] textArray;
- 
-  public TextArea(String test){
-    x = 200;
-    y = 250;
-    w = random(50,200);
-    h = 200;
+  
+  int tSize;
+   
+  public TextArea(String test, int tSizeIN, int xIN, int yIN, int wIN, int hIN){
+    tSize = tSizeIN;
+    x = xIN;
+    y = yIN;
+    w = wIN;
+    h = hIN;
     
     strText = test;
     
@@ -24,7 +27,7 @@ class TextArea {
    
     textArray = strText.split(" ");
 
-    textSize(25);
+    textSize(tSize);
     
     float wCur = 0;
     for(int i = 0; i < textArray.length; i++){
@@ -44,12 +47,25 @@ class TextArea {
    
   }
   
+  public void Draw(){
+    textAlign(LEFT);
+    fill(245,245,245,185);
+    noStroke();
+    rect(x,y,w,h);
+    stroke(0,0,0);
+    fill(50,50,50);
+    textSize(tSize);
+    text(computedText, x-w/2+2,y-h/2+25);
+  }
+  
   public void Draw(int hoverTimer){
     textAlign(LEFT);
-    fill(5,5,5,5);
+    fill(245,245,245,185);
+    noStroke();
     rect(x,y,w,h);
+    stroke(0,0,0);
     fill(50,50,50,hoverTimer);
-    textSize(25);
+    textSize(tSize);
     text(computedText, x-w/2+2,y-h/2+25);
   }
   
