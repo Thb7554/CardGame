@@ -36,7 +36,7 @@ class TextArea {
       
       wCur += textWidth(textArray[i] + " ");
       
-      if(wCur >= w){
+      if(wCur+4 >= w){
         //computedText += wCur + "/" +  (w - 8) + "\n" + textArray[i] + " ";
         computedText += "\n";
         wCur = textWidth(textArray[i] + " ");
@@ -48,25 +48,23 @@ class TextArea {
   }
   
   public void Draw(){
-    textAlign(LEFT);
-    fill(245,245,245,185);
-    noStroke();
-    rect(x,y,w,h);
-    stroke(0,0,0);
-    fill(50,50,50);
-    textSize(tSize);
-    text(computedText, x-w/2+2,y-h/2+25);
+     InnerDraw(255);
   }
   
   public void Draw(int hoverTimer){
+    InnerDraw(hoverTimer);
+  }
+  
+  public void InnerDraw(int hoverTimer){
     textAlign(LEFT);
-    fill(245,245,245,185);
+    fill(0,0,0,200);
     noStroke();
     rect(x,y,w,h);
     stroke(0,0,0);
-    fill(50,50,50,hoverTimer);
+    fill(255,255,255,hoverTimer);
     textSize(tSize);
-    text(computedText, x-w/2+2,y-h/2+25);
+    text(computedText, x-w/2+4,y-h/2+25);
+    fill(0,0,0);
   }
   
   public void Resize(float x, float y, float w, float h){

@@ -28,9 +28,9 @@ class Card {
     this.name = name;
     
     this.description = description;
-    this.textArea = new TextArea(description,25,200,200,120,100);
+    this.textArea = new TextArea(description,25,200,200,140,100);
     
-    this.smallTextArea = new TextArea(description,12,0,10,110,80);
+    this.smallTextArea = new TextArea(description,12,0,10,130,80);
     
     this.CIID = CIID;
     this.CI = CIList.get(CIID);
@@ -54,9 +54,9 @@ class Card {
     this.name = name;
     
     this.description = description;
-    this.textArea = new TextArea(description,25,200,200,120,100);
+    this.textArea = new TextArea(description,25,200,200,135,100);
     
-    this.smallTextArea = new TextArea(description,12,0,10,110,80);
+    this.smallTextArea = new TextArea(description,12,0,10,125,80);
     
     this.CIID = CIID;
     this.CI = CIList.get(CIID);
@@ -246,7 +246,7 @@ class Card {
     textSize(14);
     text(name, 0, -65);
     textSize(6);
-    text(description, 0, 55);
+    //text(description, 0, 55);
     textSize(16);
     textAlign(LEFT);
     text(atk, -45, 75);

@@ -28,7 +28,7 @@ class flameSpitter_TargettedAnimation extends TargettedAnimation {
   public void Draw(int frame) {
     float l = frame;
 
-    float lX = lerp(SlotList.get(currentCardID).x, width/2, l/maxFrame);
+    float lX = lerp(SlotList.get(currentCardID).x + width/2, width/2, l/maxFrame);
     float lY = lerp(SlotList.get(currentCardID).y, 50, l/maxFrame);
 
     fill(255, 150, 0);

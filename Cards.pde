@@ -168,10 +168,10 @@ void setup() {
   for (int i = 0; i < wid*2; i++) {
     if (i < wid) {
       //SlotList.add(new Slot(i,(i+1)*width/(wid+1),250));
-      SlotList.add(new Slot(i, (int)((i*cardWid)-cardWid*2+width/2), 200));
+      SlotList.add(new Slot(i, (int)((i*cardWid)-cardWid*2), 200));
     } else {
       //SlotList.add(new Slot(i,(i-wid+1)*width/(wid+1),450));
-      SlotList.add(new Slot(i, (int)(((i-wid)*cardWid)-cardWid*2+width/2), (int)(200+cardHei)));
+      SlotList.add(new Slot(i, (int)(((i-wid)*cardWid)-cardWid*2), (int)(200+cardHei)));
     }
   }
 
@@ -394,9 +394,11 @@ void draw() {
 
 
 
+  translate(width/2,0);
   for (int i = 0; i < SlotList.size(); i++) {
     SlotList.get(i).Draw();
   }
+  translate(-width/2,0);
 
   if (AnimationList.size() > 0) {
     AnimationList.get(0).Draw(ATC);
@@ -535,10 +537,15 @@ void draw() {
     }
   }
 
-
+  textSize(15);
   fill(0, 0, 0, 200);
   textAlign(RIGHT);
   text(frameRate, width-10, 30);
+
+  
+  fill(0,0,0,200);
+  text(width, 40,40);
+  text(height, 40,80);
 
   if (gameStatus == GameStatus.START && TriggerList.size() == 0 && AnimationList.size() == 0) {
     gameStatus = GameStatus.MAIN;
@@ -555,6 +562,7 @@ void draw() {
 
     return;
   }
+ 
 }
 
 //======================
@@ -757,13 +765,14 @@ boolean isKeyDown(final int k) {
 void mouseClicked() {
   //PLACE CARD
   if (systemStatus == SystemStatus.GAME && gameStatus == GameStatus.MAIN) {
+    translate(width/2,0);
     for (int i = SlotList.size()/2; i < SlotList.size(); i++) {
       if (SlotList.get(i).ClickSlot(cardID) != -1) {
         SlotList.get(i).Set(player1Hand.cards.get(cardID));
         player1Hand.cards.get(cardID).playable = false;
       }
     }
-
+    translate(-width/2,0);
 
     cardID = player1Hand.ClickCard();
     if (cardID != -1) {
