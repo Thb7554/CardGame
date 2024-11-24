@@ -211,7 +211,7 @@ void draw() {
 
   //-------------------------------------------------------------------------------------------MENU
   if (systemStatus == SystemStatus.MENU) {
-    background(250+5*cos(t/22), 250+5*cos(t/5), 250+5*cos(t/9));
+    background(230+6*cos(t/5), 230+6*cos(t/5), 230+6*cos(t/5));
 
     startGame.Draw();
     editDeck.Draw();
@@ -264,7 +264,7 @@ void draw() {
       }
     }
 
-    if (mousePressed && mouseY < 600 && !CAD.pressing) {
+    if (mousePressed && mouseY < height/2 + 125 && !CAD.pressing) {
       CAD.ClickDown();
       CAD.pressing = true;
     } else if (mousePressed && CAD.pressing) {
@@ -284,9 +284,7 @@ void draw() {
 
     translate(-3.5*150+75,0);
     
-    for (int i = 0; i < 7; i++) {
-      
-
+    for (int i = 0; i < player1Hand.cards.size(); i++) {
       player1Hand.cards.get(i).SmallDraw(0, 0);
       textAlign(CENTER);
       
@@ -310,11 +308,9 @@ void draw() {
     translate(CAD.diffX, 0);
     
 
-    
-    //THIS SHIT IS BUSTED FIX IT (LATER)
-    if (mousePressed && mouseY > width/2+50) { //<----- find out why this doesnt accuraelteltely work at different resolutions
-      float i = (float)(mouseX-75)/150;
-      
+    if (mousePressed && mouseY > height/2+125) {
+      float i = (width/2 + -3.5*150 - mouseX)/-150;
+
       print("xX" + (int)i + "Xx");
       
       if(i >= 0 && i < 7){
@@ -328,12 +324,7 @@ void draw() {
       }
     }
     
-    
-    
-    
-    //CLICK AND DRAG FROM SCROLLING BAR INTO HAND GOODLUCK :)
-    
-    if (mousePressed && mouseY < width/2+50) {
+    if (mousePressed && mouseY < height/2+125) {
       float i = ((-(float)CAD.diffX + mouseX-width/2 + 80)/145);
 
       //ellipse(i,20,140,140);
