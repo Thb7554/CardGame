@@ -39,29 +39,43 @@ class Button{
   }
   
   public void ProcessClick(){
-          print("# x" + x + "|" + mouseX + " #");
-          print("# y" + y + "|" + mouseY + " #");
-          print("# x+w" + (x + w) + "|" + mouseY + " #");
-          print("# y+h" + (y + h) + "|" + mouseY + " #");
-          
-          //enabled = false;
-          bColor = color(255,255,0);   
+        print("# x" + x + "|" + mouseX + " #");
+        print("# y" + y + "|" + mouseY + " #");
+        print("# x+w" + (x + w) + "|" + mouseY + " #");
+        print("# y+h" + (y + h) + "|" + mouseY + " #");
+        
+        //enabled = false;
+        bColor = color(255,255,0);   
   }
   
   public void Draw(){
+    textSize(20);
     if(hidden){
       return; 
     }
+
+    
     if(centered){
       rectMode(CENTER); 
     }
     else{
       rectMode(CORNER); 
     }
-    fill(bColor);
-    rect(x,y,w,h); 
-    fill(0,0,0);
-    textAlign(CENTER);
-    text(bText,x,y);
+    if(enabled){
+      fill(bColor);
+      rect(x,y,w,h); 
+      fill(0,0,0);
+      textAlign(CENTER);
+      text(bText,x,y);
+      bColor = color(255,255,255);
+    }
+    else{
+      fill(200,200,200);
+      rect(x,y,w,h); 
+      fill(85,85,85);
+      textAlign(CENTER);
+      text(bText,x,y);
+    }
+
   }
 }

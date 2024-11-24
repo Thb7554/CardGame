@@ -48,7 +48,7 @@ class Slot {
     fill(this.card.CI.c);
     stroke(this.card.CI.cc);
     strokeWeight(2);
-    translate(x, y);
+    translate(x + width/2, y);
 
     int mod = 1;
     if (!turn) {
@@ -58,7 +58,7 @@ class Slot {
     rect(0, 1.5*mod*cardHei*sin(time*PI/2)-mod*cardHei/2, cardWid, mod*cardHei*sin(time*PI/2));
     strokeWeight(1);
     noStroke();
-    translate(-x, -y);
+    translate(-x - width/2, -y);
   }
 
   public void Die() {

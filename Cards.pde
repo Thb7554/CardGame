@@ -211,24 +211,19 @@ void draw() {
 
   //-------------------------------------------------------------------------------------------MENU
   if (systemStatus == SystemStatus.MENU) {
-    background(150, 250, 150);
+    background(250+5*cos(t/22), 250+5*cos(t/5), 250+5*cos(t/9));
 
     startGame.Draw();
     editDeck.Draw();
+    
+    if(player1ManaList.size() > 0){
+      startGame.enabled = true;
+    }
+    else{
+      startGame.enabled = false;
+    }
+    
     if (mousePressed && startGame.Click()) {
-      
-      ArrayList colorID = new ArrayList<Integer>();
-      
-      for(int i = 0; i < player1Hand.cards.size(); i++){
-        int compare = player1Hand.cards.get(i).CIID;
-        
-        if(compare != 6 && !colorID.contains(compare)){
-          colorID.add(compare);
-          player1ManaList.add(new Mana(CIList.get(compare)));
-        }
-      }
-      
-      
       systemStatus = SystemStatus.GAME;
       StartTurn();
       backToMenu.hidden = true;
@@ -255,6 +250,18 @@ void draw() {
       backToMenu.hidden = true;
       startGame.hidden = false;
       editDeck.hidden = false;
+      
+      ArrayList colorID = new ArrayList<Integer>();
+      player1ManaList = new ArrayList<Mana>();
+      
+      for(int i = 0; i < player1Hand.cards.size(); i++){
+        int compare = player1Hand.cards.get(i).CIID;
+        
+        if(compare != 6 && !colorID.contains(compare)){
+          colorID.add(compare);
+          player1ManaList.add(new Mana(CIList.get(compare)));
+        }
+      }
     }
 
     if (mousePressed && mouseY < 600 && !CAD.pressing) {
