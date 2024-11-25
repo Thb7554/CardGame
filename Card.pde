@@ -93,6 +93,10 @@ class Card {
     textSize(16);
     text(name, 0, -cardHei/2+15);
     
+    if(smallTextArea.w != cardWid || smallTextArea.h != cardHei/3){
+      smallTextArea.Resize(0,cardHei/3-35,cardWid,cardHei/3);
+    }
+    
     smallTextArea.Draw();
     
     //textSize(10);
@@ -139,6 +143,11 @@ class Card {
     //if(playable){
     rect(0, 0, 400, 600);
     fill(CI.cc, hoverTimer);
+    
+    if(img != null){
+      image(img, 0,-10,400,400);  
+    }
+    
     textAlign(CENTER);
     textSize(45);
     text(name, 0, -250);

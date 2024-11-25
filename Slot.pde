@@ -11,6 +11,14 @@ class Slot {
     this.x = x;
     this.y = y;
   }
+  
+  public int adjustedX(){
+    return (int)(x*cardWid-2*cardWid);
+  }
+  
+  public int adjustedY(){
+    return (int)(y*cardHei - cardHei*3/2 + height/2);
+  }
 
   public void Set(int ID) {
     Set(CardDatabase.get(ID));
@@ -26,7 +34,7 @@ class Slot {
   }
 
   public void Draw() {
-    translate(x, y);
+    translate(x*cardWid-2*cardWid + width/2, (1+y)*cardHei);
     fill(50, 50, 50, 20);
     rect(0, 0, cardWid, cardHei);
 
@@ -40,25 +48,26 @@ class Slot {
     }
 
 
-
-    translate(-x, -y);
+    translate(-x*cardWid+2*cardWid - width/2, -((1+y)*cardHei));
+    //translate(-x, -y);
   }
 
   public void DrawAttack(float time) {
     fill(this.card.CI.c);
     stroke(this.card.CI.cc);
     strokeWeight(2);
-    translate(x + width/2, y);
+    translate(x*cardWid-2*cardWid + width/2, (1+y)*cardHei);
 
     int mod = 1;
     if (!turn) {
       mod = -1;
     }
 
-    rect(0, 1.5*mod*cardHei*sin(time*PI/2)-mod*cardHei/2, cardWid, mod*cardHei*sin(time*PI/2));
+    //rect(0, 1.5*mod*cardHei*sin(time*PI/2)-mod*cardHei/2, cardWid, mod*cardHei*sin(time*PI/2));
+    rect(0,  0 + cardHei*sin(time*PI/2)*mod, cardWid, cardHei);
     strokeWeight(1);
     noStroke();
-    translate(-x - width/2, -y);
+    translate(-x*cardWid+2*cardWid - width/2, -((1+y)*cardHei));
   }
 
   public void Die() {
@@ -90,10 +99,33 @@ class Slot {
     int slotID = -1;
 
     int calcMouseX = mouseX - width/2;
+    int calcMouseY = mouseY + (int)cardHei - height/2;
+    
+    print("      ");
+    print(ID + ":");
+    print(calcMouseX + "|x");
+    
+    int xmin = (int)(((x)*cardWid)-cardWid*5/2);
+    int xmax = (int)(((x)*cardWid)-cardWid*3/2);
+    
+    print(xmin + "|");
+    print(xmax + "| ");
+    
+    int ymin = (int)(y*cardHei - cardHei/2);
+    int ymax = (int)(y*cardHei + cardHei/2);
+    
+    print(calcMouseY + "|y");
+    print(ymin + "|");
+    print(ymax + "|");
 
-    if (calcMouseX > x - cardWid/2 && calcMouseX < x+cardWid/2 && mouseY > y - cardHei/2 && mouseY < y+cardHei/2) {
+    //(int)(((x-5)*cardWid)-cardWid*2), 200+y*cardHei
+
+    if (calcMouseX > xmin && 
+        calcMouseX < xmax && 
+        calcMouseY > ymin && 
+        calcMouseY < ymax) {
       fill(255, 0, 0);
-      rect(x, y, cardWid, cardHei);
+      rect(x*cardWid-cardWid*2, y*cardHei + (int)cardHei, cardWid, cardHei);
       slotID = ID;
 
       //"Creature" only logic, doesnt allow cards that target occupied spaces

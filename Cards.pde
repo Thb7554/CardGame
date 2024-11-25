@@ -16,8 +16,10 @@ ArrayList<Animation> AnimationList = new ArrayList<Animation>();
 static final int KEYS = 0500;
 final boolean[] keysDown = new boolean[KEYS];
 
+float baseCardWid, baseCardHei;
+
 float cardWid = 125;
-float cardHei = 200;
+float cardHei = 260;
 int ATC = 0;
 
 Button startGame, editDeck, backToMenu;
@@ -92,6 +94,9 @@ void setup() {
   }
   windowResize(1200, size);
 
+  baseCardWid = cardWid;
+  baseCardHei = cardHei;
+
   rectMode(CENTER);
   imageMode(CENTER);
   textSize(16);
@@ -127,7 +132,7 @@ void setup() {
 
   CardDatabase.add(new Card(0, "Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
 
-  Card card_FlameSpitter = new Card(1, "Flame Spitter", "Deals 2 Dmg to Opponent at the end of turn.", 0, 0, 2, 2);
+  Card card_FlameSpitter = new Card(1, "Flame Spitter", "Deals 2 Dmg to Opponent at the end of each turn.", 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2, TriggerType.ENDBOTH));
   card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
@@ -143,7 +148,7 @@ void setup() {
   CardDatabase.add(card_HellWall);
 
   Card card_BonFire = new Card(4, "Bonfire", "Add 1 Red Mana at the end of your turn.", 0, 0, 4, 2);
-  card_BonFire.effectList.add(new effect_AddMana(3, 0, TriggerType.END));
+  card_BonFire.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
   //card_BonFire.SetImage("hellwall.png");
   CardDatabase.add(card_BonFire);
 
@@ -168,10 +173,12 @@ void setup() {
   for (int i = 0; i < wid*2; i++) {
     if (i < wid) {
       //SlotList.add(new Slot(i,(i+1)*width/(wid+1),250));
-      SlotList.add(new Slot(i, (int)((i*cardWid)-cardWid*2), 200));
+      //SlotList.add(new Slot(i, (int)((i*cardWid)-cardWid*2), 200));
+      SlotList.add(new Slot(i, i, 0));
     } else {
       //SlotList.add(new Slot(i,(i-wid+1)*width/(wid+1),450));
-      SlotList.add(new Slot(i, (int)(((i-wid)*cardWid)-cardWid*2), (int)(200+cardHei)));
+      //SlotList.add(new Slot(i, (int)(((i-wid)*cardWid)-cardWid*2), (int)(200+cardHei)));
+      SlotList.add(new Slot(i, i-5, 1));
     }
   }
 
@@ -181,12 +188,19 @@ void setup() {
   }
 
   for (int i = 0; i < 7; i++) {
-    if (random(0, 1) > .5) {
-      player2Hand.Set(4);
-    } else {
-      player2Hand.Set(7);
-    }
+    player2Hand.Set((int)random(0, CardDatabase.size()));
   }
+  
+  ArrayList colorID2 = new ArrayList<Integer>();
+  player2ManaList = new ArrayList<Mana>();
+  for(int i = 0; i < player2Hand.cards.size(); i++){
+        int compare = player2Hand.cards.get(i).CIID;
+        
+        if(compare != 6 && !colorID2.contains(compare)){
+          colorID2.add(compare);
+          player2ManaList.add(new Mana(CIList.get(compare)));
+        }
+      }
 
   //StartTurn();
 }
@@ -202,6 +216,9 @@ void draw() {
     backToMenu.x = width/2;
     backToMenu.y = height/2-200;
   }
+  
+  cardWid = baseCardWid * width/1200;
+  cardHei = baseCardHei * height/900;
   
   
   noStroke();
@@ -243,7 +260,9 @@ void draw() {
   //-------------------------------------------------------------------------------------------EDIT
   if (systemStatus == SystemStatus.EDIT) {
     background(150, 150, 250);
-
+     
+    int xDis = (int)cardWid + 10;
+     
     backToMenu.Draw();
     if (mousePressed && backToMenu.Click()) {
       systemStatus = SystemStatus.MENU;
@@ -308,7 +327,7 @@ void draw() {
     translate(CAD.diffX, 0);
     
 
-    if (mousePressed && mouseY > height/2+125) {
+    if (mousePressed && mouseY > height/2+cardHei/2) {
       float i = (width/2 + -3.5*150 - mouseX)/-150;
 
       print("xX" + (int)i + "Xx");
@@ -324,8 +343,8 @@ void draw() {
       }
     }
     
-    if (mousePressed && mouseY < height/2+125) {
-      float i = ((-(float)CAD.diffX + mouseX-width/2 + 80)/145);
+    if (mousePressed && mouseY < height/2+cardHei/2) {
+      float i = ((-(float)CAD.diffX + mouseX-width/2 + 80)/xDis);
 
       //ellipse(i,20,140,140);
 
@@ -335,7 +354,7 @@ void draw() {
       }
     }
     else if(!mousePressed){
-      CAD.Reset(-145 * (CardDatabase.size()-1)+145,0);
+      CAD.Reset(-(int)xDis * (CardDatabase.size()-1)+(int)xDis,0);
       CAD.Move();
     }
 
@@ -361,7 +380,7 @@ void draw() {
       rect(-55, -115, 40, 30);
       fill(0, 0, 0);
       text(CardDatabase.get(i).ID, -55, -105);
-      translate(145, 0);
+      translate(xDis, 0);
     }
 
     return;
@@ -391,12 +410,9 @@ void draw() {
   }
 
 
-
-  translate(width/2,0);
   for (int i = 0; i < SlotList.size(); i++) {
     SlotList.get(i).Draw();
   }
-  translate(-width/2,0);
 
   if (AnimationList.size() > 0) {
     AnimationList.get(0).Draw(ATC);
@@ -496,15 +512,16 @@ void draw() {
   //text(gameStatus, 15,15);
 
   textSize(24);
+  textAlign(CENTER);
   text(player1HP, width/2, 50);
   text(player2HP, width/2, height-50);
 
   for (int i = 0; i < player1ManaList.size(); i++) {
-    player1ManaList.get(i).Draw(i*30, 0);
+    player1ManaList.get(i).Draw(i, 0);
   }
 
   for (int i = 0; i < player2ManaList.size(); i++) {
-    player2ManaList.get(i).Draw(i*30, -400);
+    player2ManaList.get(i).Draw(i, -400);
   }
 
   fill(140, 140, 140);

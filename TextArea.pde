@@ -4,6 +4,8 @@ class TextArea {
   String computedText = "";
   String[] textArray;
   
+  float pW, pH;
+  
   int tSize;
    
   public TextArea(String test, int tSizeIN, int xIN, int yIN, int wIN, int hIN){
@@ -27,6 +29,13 @@ class TextArea {
    
     textArray = strText.split(" ");
 
+    textSize(12);
+    float totalWid = textWidth(strText);
+    
+    tSize = (int)(60-totalWid/4);
+    tSize = min((int)(w*h)/400, tSize);
+    tSize = max(12, tSize);
+    
     textSize(tSize);
     
     float wCur = 0;
@@ -63,7 +72,7 @@ class TextArea {
     stroke(0,0,0);
     fill(255,255,255,hoverTimer);
     textSize(tSize);
-    text(computedText, x-w/2+4,y-h/2+25);
+    text(computedText, x-w/2+4,y-h/2+tSize*2/3+5);
     fill(0,0,0);
   }
   
