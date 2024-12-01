@@ -1,5 +1,6 @@
 class Card {
   String name, description;
+  boolean flavor;
   int CIID;
   ColorIdentity CI;
 
@@ -49,11 +50,12 @@ class Card {
     this.effectList = new ArrayList<Effect>();
   }
 
-  public Card(int ID, String name, String description, int CIID, int ATK, int HP, int Cost) {
+  public Card(int ID, String name, String description, boolean flavor, int CIID, int ATK, int HP, int Cost) {
     this.ID = ID;
     this.name = name;
     
     this.description = description;
+    this.flavor = flavor;
     this.textArea = new TextArea(description,25,200,200,135,100);
     
     this.smallTextArea = new TextArea(description,12,0,10,125,80);
@@ -78,7 +80,7 @@ class Card {
     img = loadImage("images/" + fileName);
   }
 
-  public void Draw(boolean showMana) {
+  public void Draw(boolean showMana, boolean showFlavor) {
     stroke(0, 0, 0);
     fill(CI.c);
     rect(0, 0, cardWid, cardHei);
@@ -97,6 +99,7 @@ class Card {
       smallTextArea.Resize(0,cardHei/3-35,cardWid,cardHei/3);
     }
     
+    if(showFlavor || !flavor )
     smallTextArea.Draw();
     
     //textSize(10);

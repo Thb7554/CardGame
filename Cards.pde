@@ -128,41 +128,41 @@ void setup() {
 
   AnimationDatabase.add(new flameSpitter_TargettedAnimation());
 
-  CardDatabase.add(new Card(-1, "", "", 6, 0, 0, 0));
+  CardDatabase.add(new Card(-1, "", "", false, 6, 0, 0, 0));
 
-  CardDatabase.add(new Card(0, "Rust Soldier", "Lacking all but honor.", 0, 3, 1, 1));
+  CardDatabase.add(new Card(0, "Rust Soldier", "Lacking all but honor.", true, 0, 3, 1, 1));
 
-  Card card_FlameSpitter = new Card(1, "Flame Spitter", "Deals 2 Dmg to Opponent at the end of each turn.", 0, 0, 2, 2);
+  Card card_FlameSpitter = new Card(1, "Flame Spitter", "Deals 2 Dmg to Opponent at the end of each turn.", false, 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2, TriggerType.ENDBOTH));
   card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
 
-  Card card_Bright = new Card(2, "Bright", "Deals 1 Dmg to Opponent at the start of your turn.", 0, 2, 1, 2);
+  Card card_Bright = new Card(2, "Bright", "Deals 1 Dmg to Opponent at the start of your turn.", false, 0, 2, 1, 2);
   card_Bright.effectList.add(new effect_DamageOpponent(1, TriggerType.START));
   card_Bright.SetImage("bright.png");
   CardDatabase.add(card_Bright);
 
-  Card card_HellWall = new Card(3, "Hell Wall", "Deals 3 Dmg to Opponent at the end of your turn.", 0, 0, 6, 4);
+  Card card_HellWall = new Card(3, "Hell Wall", "Deals 3 Dmg to Opponent at the end of your turn.", false, 0, 0, 6, 4);
   card_HellWall.effectList.add(new effect_DamageOpponent(3, TriggerType.END));
   card_HellWall.SetImage("hellwall.png");
   CardDatabase.add(card_HellWall);
 
-  Card card_BonFire = new Card(4, "Bonfire", "Add 1 Red Mana at the end of your turn.", 0, 0, 4, 2);
+  Card card_BonFire = new Card(4, "Bonfire", "Add 1 Red Mana at the end of your turn.", false, 0, 0, 4, 2);
   card_BonFire.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
   //card_BonFire.SetImage("hellwall.png");
   CardDatabase.add(card_BonFire);
 
-  CardDatabase.add(new Card(5, "Fountain", "Ocean calls.", 1, 0, 4, 1));
-  CardDatabase.add(new Card(6, "Vineyard", "Tree.", 2, 0, 2, 1));
+  CardDatabase.add(new Card(5, "Fountain", "Ocean calls.", true, 1, 0, 4, 1));
+  CardDatabase.add(new Card(6, "Vineyard", "Tree.", true, 2, 0, 2, 1));
 
-  Card card_Inn = new Card(7, "Inn", "Heals.", 3, 0, 8, 2);
+  Card card_Inn = new Card(7, "Inn", "Heals.", true, 3, 0, 8, 2);
   card_Inn.SetImage("inn.png");
   CardDatabase.add(card_Inn);
 
-  CardDatabase.add(new Card(8, "Skeleton", "Rahhhhhh.", 4, 2, 2, 1));
-  CardDatabase.add(new Card(9, "Lightning", "Shock shock.", 5, 6, 1, 3));
-  CardDatabase.add(new Card(10, "Captain", "Big guy.", 3, 0, 5, 1));
-  CardDatabase.add(new Card(11, "Wave", "Wave calls.", 1, 1, 6, 2));
+  CardDatabase.add(new Card(8, "Skeleton", "Rahhhhhh.", true, 4, 2, 2, 1));
+  CardDatabase.add(new Card(9, "Lightning", "Shock shock.", true, 5, 6, 1, 3));
+  CardDatabase.add(new Card(10, "Captain", "Big guy.", true, 3, 0, 5, 1));
+  CardDatabase.add(new Card(11, "Wave", "Wave calls.", true, 1, 1, 6, 2));
 
   //player1ManaList.add(new Mana(CIList.get(0)));
   //player1ManaList.add(new Mana(CIList.get(1)));
@@ -361,7 +361,7 @@ void draw() {
     //translate(200*sin(t),0);
 
     for (int i = 1; i < CardDatabase.size(); i++) {
-      CardDatabase.get(i).Draw(true);
+      CardDatabase.get(i).Draw(true, true);
       textAlign(CENTER);
       
       if(selectedCard == i){
