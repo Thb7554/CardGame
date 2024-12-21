@@ -39,10 +39,15 @@ class Button{
   }
   
   public void ProcessClick(){
-        print("# x" + x + "|" + mouseX + " #");
-        print("# y" + y + "|" + mouseY + " #");
-        print("# x+w" + (x + w) + "|" + mouseY + " #");
-        print("# y+h" + (y + h) + "|" + mouseY + " #");
+        //print("# x" + x + "|" + mouseX + " #");
+        //print("# y" + y + "|" + mouseY + " #");
+        //print("# x+w" + (x + w) + "|" + mouseY + " #");
+        //print("# y+h" + (y + h) + "|" + mouseY + " #");
+        
+        print(bText);
+        
+        buttonPress.play();
+        
         
         //enabled = false;
         bColor = color(255,255,0);   

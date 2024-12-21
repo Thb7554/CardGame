@@ -1,3 +1,7 @@
+import processing.sound.*;
+SoundFile shopTheme;
+SoundFile buttonPress;
+
 ArrayList<ColorIdentity> CIList = new ArrayList<ColorIdentity>();
 
 ArrayList<Card> CardDatabase = new ArrayList<Card>();
@@ -22,19 +26,20 @@ float cardWid = 125;
 float cardHei = 260;
 int ATC = 0;
 
-Button startGame, editDeck, backToMenu;
+Button startGame, editDeck, backToMenu, toSettings, fromSettings;
 enum GameStatus {
   OPENING,
-    START,
-    MAIN, //Player actions
-    COMBAT,
-    END
+  START,
+  MAIN, //Player actions
+  COMBAT,
+  END
 }
 
 enum SystemStatus {
   MENU,
-    EDIT,
-    GAME
+  EDIT,
+  GAME,
+  SETT
 }
 
 GameStatus gameStatus = GameStatus.MAIN;
@@ -79,6 +84,9 @@ void setup() {
   size(5, 5, P2D);
   int size = 900;
 
+  frameRate(60);
+
+
   PFont pfont = createFont("SansSerif", 128);
   textFont(pfont);
 
@@ -94,6 +102,12 @@ void setup() {
   }
   windowResize(1200, size);
 
+  shopTheme = new SoundFile(this, "sound/ShopTheme.wav");
+  
+  shopTheme.loop();
+  
+  buttonPress = new SoundFile(this, "sound/ButtonPress.wav");
+  
   baseCardWid = cardWid;
   baseCardHei = cardHei;
 
@@ -108,7 +122,9 @@ void setup() {
   startGame = new Button("Start Game", true, width/2, height/2, 200, 50);
   editDeck = new Button("Edit Deck", true, width/2, height/2+100, 200, 50);
   backToMenu = new Button("Back to Menu", true, width/2, height/2-200, 200, 50);
-
+  toSettings = new Button("Settings", true, width/2, height/2+300,150,45);
+  fromSettings = new Button("Back to Menu", true, width/2, height/2-200,200,50);
+  
   String words = "start";
   String[] list = split(words, ' ');
 
@@ -215,6 +231,12 @@ void draw() {
     
     backToMenu.x = width/2;
     backToMenu.y = height/2-200;
+    
+    toSettings.x = width/2;
+    toSettings.y = height/2+300;
+    
+    fromSettings.x = width/2;
+    fromSettings.y = height/2-200;
   }
   
   cardWid = baseCardWid * width/1200;
@@ -232,6 +254,9 @@ void draw() {
 
     startGame.Draw();
     editDeck.Draw();
+    toSettings.Draw();
+    
+    text((int)frameRate,20,20);
     
     if(player1ManaList.size() > 0){
       startGame.enabled = true;
@@ -246,17 +271,47 @@ void draw() {
       backToMenu.hidden = true;
       startGame.hidden = true;
       editDeck.hidden = true;
+      toSettings.hidden = true;
+      fromSettings.hidden = true;
     }
     if (mousePressed && editDeck.Click()) {
       systemStatus = SystemStatus.EDIT;
       backToMenu.hidden = false;
       startGame.hidden = true;
       editDeck.hidden = true;
+      toSettings.hidden = true;
+      fromSettings.hidden = true;
+    }
+    if (mousePressed && toSettings.Click()) {
+      systemStatus = SystemStatus.SETT;
+      backToMenu.hidden = true;
+      startGame.hidden = true;
+      editDeck.hidden = true;
+      toSettings.hidden = true;
+      fromSettings.hidden = false;
     }
 
     return;
   }
 
+
+  //-------------------------------------------------------------------------------------------SETTINGS
+  if (systemStatus == SystemStatus.SETT) {
+    background(200, 220, 180);
+    
+    fromSettings.Draw();
+    if (mousePressed && fromSettings.Click()) {
+      systemStatus = SystemStatus.MENU;
+      backToMenu.hidden = true;
+      startGame.hidden = false;
+      editDeck.hidden = false;
+      toSettings.hidden = false;
+      fromSettings.hidden = true;
+    }
+    
+    return;
+  }
+  
   //-------------------------------------------------------------------------------------------EDIT
   if (systemStatus == SystemStatus.EDIT) {
     background(150, 150, 250);
@@ -269,6 +324,8 @@ void draw() {
       backToMenu.hidden = true;
       startGame.hidden = false;
       editDeck.hidden = false;
+      toSettings.hidden = false;
+      fromSettings.hidden = true;
       
       ArrayList colorID = new ArrayList<Integer>();
       player1ManaList = new ArrayList<Mana>();
