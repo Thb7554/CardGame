@@ -74,6 +74,32 @@ class Card {
     this.cost = Cost;
     this.effectList = new ArrayList<Effect>();
   }
+  
+  public Card(String name, String description, boolean flavor, int CIID, int ATK, int HP, int Cost) {
+    this.ID = cardIDCurIndex;
+    cardIDCurIndex++;
+    this.name = name;
+    
+    this.description = description;
+    this.flavor = flavor;
+    this.textArea = new TextArea(description,25,200,200,135,100);
+    
+    this.smallTextArea = new TextArea(description,12,0,10,125,80);
+    
+    this.CIID = CIID;
+    this.CI = CIList.get(CIID);
+
+    this.creature = true;
+    this.atk = ATK;
+    this.maxHP = HP;
+    this.curHP = this.maxHP;
+
+    this.playable = true;
+    this.selected = false;
+
+    this.cost = Cost;
+    this.effectList = new ArrayList<Effect>();
+  }
 
   public void SetImage(String fileName){
     print("SETIMAGE " + fileName);

@@ -80,6 +80,8 @@ int selectedCard = -1;
 
 int tijiWidth, tijiHeight;
 
+int cardIDCurIndex = -1;
+
 void setup() {
   size(5, 5, P2D);
   int size = 900;
@@ -104,7 +106,7 @@ void setup() {
 
   shopTheme = new SoundFile(this, "sound/ShopTheme.wav");
   
-  shopTheme.loop();
+  //shopTheme.loop(); //UNCOMMENT FOR MUSIC
   
   buttonPress = new SoundFile(this, "sound/ButtonPress.wav");
   
@@ -144,41 +146,66 @@ void setup() {
 
   AnimationDatabase.add(new flameSpitter_TargettedAnimation());
 
-  CardDatabase.add(new Card(-1, "", "", false, 6, 0, 0, 0));
+  CardDatabase.add(new Card("", "", false, 6, 0, 0, 0));
 
-  CardDatabase.add(new Card(0, "Rust Soldier", "Lacking all but honor.", true, 0, 3, 1, 1));
+  CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.", true, 0, 3, 1, 1));
 
-  Card card_FlameSpitter = new Card(1, "Flame Spitter", "Deals 2 Dmg to Opponent at the end of each turn.", false, 0, 0, 2, 2);
+  Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg to Opponent at the end of each turn.", false, 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2, TriggerType.ENDBOTH));
   card_FlameSpitter.SetImage("flamespitter.png");
   CardDatabase.add(card_FlameSpitter);
 
-  Card card_Bright = new Card(2, "Bright", "Deals 1 Dmg to Opponent at the start of your turn.", false, 0, 2, 1, 2);
+  Card card_Bright = new Card("Bright", "Deals 1 Dmg to Opponent at the start of your turn.", false, 0, 2, 1, 2);
   card_Bright.effectList.add(new effect_DamageOpponent(1, TriggerType.START));
   card_Bright.SetImage("bright.png");
   CardDatabase.add(card_Bright);
 
-  Card card_HellWall = new Card(3, "Hell Wall", "Deals 3 Dmg to Opponent at the end of your turn.", false, 0, 0, 6, 4);
+  Card card_HellWall = new Card("Hell Wall", "Deals 3 Dmg to Opponent at the end of your turn.", false, 0, 0, 6, 4);
   card_HellWall.effectList.add(new effect_DamageOpponent(3, TriggerType.END));
   card_HellWall.SetImage("hellwall.png");
   CardDatabase.add(card_HellWall);
 
-  Card card_BonFire = new Card(4, "Bonfire", "Add 1 Red Mana at the end of your turn.", false, 0, 0, 4, 2);
+  Card card_BonFire = new Card("Bonfire", "Add 1 Red Mana at the end of your turn.", false, 0, 0, 4, 2);
   card_BonFire.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
   //card_BonFire.SetImage("hellwall.png");
   CardDatabase.add(card_BonFire);
+  
+  Card card_Pillager = new Card("Pillager", "Gain 1 Power after dealing damage to opponent.", false, 0, 2, 2, 2);
+  //card_Pillager.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
+  card_Pillager.SetImage("pillager.png");
+  CardDatabase.add(card_Pillager);
 
-  CardDatabase.add(new Card(5, "Fountain", "Ocean calls.", true, 1, 0, 4, 1));
-  CardDatabase.add(new Card(6, "Vineyard", "Tree.", true, 2, 0, 2, 1));
+  CardDatabase.add(new Card("Fountain", "Ocean calls.", true, 1, 0, 4, 1));
+  
+  Card card_WetOrb = new Card("Wet Orb", "Lower Opposing Card's Attack at the end of your turn.", false, 1, 0,6, 3);
+  //card_Pillager.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
+  card_WetOrb.SetImage("wetorb.png");
+  CardDatabase.add(card_WetOrb);
+  
+  CardDatabase.add(new Card("Wave", "Wave calls.", true, 1, 1, 6, 2));
+  
+  
+  //GREEN
+  CardDatabase.add(new Card("Vineyard", "Tree.", true, 2, 0, 2, 1));
+  
+  //WHITE
+  CardDatabase.add(new Card("Captain", "Big guy.", true, 3, 0, 5, 1));
 
-  Card card_Inn = new Card(7, "Inn", "Heals.", true, 3, 0, 8, 2);
+  Card card_Inn = new Card("Inn", "Heals.", true, 3, 0, 8, 2);
   card_Inn.SetImage("inn.png");
   CardDatabase.add(card_Inn);
 
-  CardDatabase.add(new Card(8, "Skeleton", "Rahhhhhh.", true, 4, 2, 2, 1));
-  CardDatabase.add(new Card(9, "Lightning", "Shock shock.", true, 5, 6, 1, 3));
-  CardDatabase.add(new Card(10, "Captain", "Big guy.", true, 3, 0, 5, 1));
-  CardDatabase.add(new Card(11, "Wave", "Wave calls.", true, 1, 1, 6, 2));
+  //PURPLE
+  CardDatabase.add(new Card("Skeleton", "Rahhhhhh.", true, 4, 2, 2, 1));
+  CardDatabase.add(new Card("Lightning", "Shock shock.", true, 5, 6, 1, 3));
+  
+  //YELLOW
+  Card card_SparkGenerator = new Card("Spark Generator", "At the start of your turn a random card gets 1 charge.", false,5, 0,3, 1);
+  //card_Pillager.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
+  card_SparkGenerator.SetImage("sparkgenerator.png");
+  CardDatabase.add(card_SparkGenerator);
+  
+ 
 
   //player1ManaList.add(new Mana(CIList.get(0)));
   //player1ManaList.add(new Mana(CIList.get(1)));
