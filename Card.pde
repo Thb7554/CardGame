@@ -107,10 +107,16 @@ class Card {
   }
 
   public void Draw(boolean showMana, boolean showFlavor) {
+    noStroke();
+    fill(0,0,0,50);
+    rect(5, 5, cardWid, cardHei);
+    
+    strokeWeight(2);
     stroke(0, 0, 0);
     fill(CI.c);
     rect(0, 0, cardWid, cardHei);
     fill(CI.cc);
+    strokeWeight(1);
     
     if(img != null){
       image(img, 0,-20,cardWid,cardWid);
@@ -160,6 +166,8 @@ class Card {
         ellipse(-50+(i+1)*100/(cost+1), -70, 8, 8);
       }
     }
+
+
 
     noStroke();
   }

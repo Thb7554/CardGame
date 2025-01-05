@@ -1,6 +1,7 @@
 import processing.sound.*;
 SoundFile shopTheme;
 SoundFile buttonPress;
+SoundFile fireSFX;
 
 ArrayList<ColorIdentity> CIList = new ArrayList<ColorIdentity>();
 
@@ -25,6 +26,8 @@ float baseCardWid, baseCardHei;
 float cardWid = 125;
 float cardHei = 260;
 int ATC = 0;
+
+int mones = 0;
 
 Button startGame, editDeck, backToMenu, toSettings, fromSettings;
 enum GameStatus {
@@ -110,6 +113,8 @@ void setup() {
   
   buttonPress = new SoundFile(this, "sound/ButtonPress.wav");
   
+  fireSFX = new SoundFile(this, "sound/FireSound.wav");
+  
   baseCardWid = cardWid;
   baseCardHei = cardHei;
 
@@ -148,7 +153,9 @@ void setup() {
 
   CardDatabase.add(new Card("", "", false, 6, 0, 0, 0));
 
-  CardDatabase.add(new Card("Rust Soldier", "Lacking all but honor.", true, 0, 3, 1, 1));
+  Card card_RustSoldier = new Card("Rust Soldier", "Lacking all but honor.", true, 0, 3, 1, 1);
+  card_RustSoldier.SetImage("rustsoldier.png");
+  CardDatabase.add(card_RustSoldier);
 
   Card card_FlameSpitter = new Card("Flame Spitter", "Deals 2 Dmg to Opponent at the end of each turn.", false, 0, 0, 2, 2);
   card_FlameSpitter.effectList.add(new effect_DamageOpponent(2, TriggerType.ENDBOTH));
@@ -167,7 +174,7 @@ void setup() {
 
   Card card_BonFire = new Card("Bonfire", "Add 1 Red Mana at the end of your turn.", false, 0, 0, 4, 2);
   card_BonFire.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
-  //card_BonFire.SetImage("hellwall.png");
+  card_BonFire.SetImage("bonfire.png");
   CardDatabase.add(card_BonFire);
   
   Card card_Pillager = new Card("Pillager", "Gain 1 Power after dealing damage to opponent.", false, 0, 2, 2, 2);
@@ -175,31 +182,43 @@ void setup() {
   card_Pillager.SetImage("pillager.png");
   CardDatabase.add(card_Pillager);
 
-  CardDatabase.add(new Card("Fountain", "Ocean calls.", true, 1, 0, 4, 1));
+  Card card_Fountain = new Card("Fountain", "Ocean calls.", true, 1, 0, 4, 1);
+  card_Fountain.SetImage("fountain.png");
+  CardDatabase.add(card_Fountain);
   
   Card card_WetOrb = new Card("Wet Orb", "Lower Opposing Card's Attack at the end of your turn.", false, 1, 0,6, 3);
   //card_Pillager.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
   card_WetOrb.SetImage("wetorb.png");
   CardDatabase.add(card_WetOrb);
   
-  CardDatabase.add(new Card("Wave", "Wave calls.", true, 1, 1, 6, 2));
-  
+  Card card_Wave = new Card("Wave", "Wave calls.", true, 1, 1, 6, 2);
+  card_Wave.SetImage("wave.png");
+  CardDatabase.add(card_Wave);
   
   //GREEN
-  CardDatabase.add(new Card("Vineyard", "Tree.", true, 2, 0, 2, 1));
+  Card card_Vineyard = new Card("Vineyard", "Tree.", true, 2, 0, 2, 1);
+  card_Vineyard.SetImage("vineyard.png");
+  CardDatabase.add(card_Vineyard);
   
   //WHITE
-  CardDatabase.add(new Card("Captain", "Big guy.", true, 3, 0, 5, 1));
+  Card card_Captain = new Card("Captain", "Big guy.", true, 3, 0, 5, 1);
+  card_Captain.SetImage("captain.png");
+  CardDatabase.add(card_Captain);
 
   Card card_Inn = new Card("Inn", "Heals.", true, 3, 0, 8, 2);
   card_Inn.SetImage("inn.png");
   CardDatabase.add(card_Inn);
 
   //PURPLE
-  CardDatabase.add(new Card("Skeleton", "Rahhhhhh.", true, 4, 2, 2, 1));
-  CardDatabase.add(new Card("Lightning", "Shock shock.", true, 5, 6, 1, 3));
+  Card card_Skeleton = new Card("Skeleton", "Rahhhhhh.", true, 4, 2, 2, 1);
+  card_Skeleton.SetImage("skeleton.png");
+  CardDatabase.add(card_Skeleton);
   
   //YELLOW
+  Card card_Lightning = new Card("Lightning", "Shock shock.", true, 5, 6, 1, 3);
+  card_Lightning.SetImage("lightning.png");
+  CardDatabase.add(card_Lightning);
+  
   Card card_SparkGenerator = new Card("Spark Generator", "At the start of your turn a random card gets 1 charge.", false,5, 0,3, 1);
   //card_Pillager.effectList.add(new effect_AddMana(1, 0, TriggerType.END));
   card_SparkGenerator.SetImage("sparkgenerator.png");

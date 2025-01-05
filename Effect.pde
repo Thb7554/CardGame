@@ -28,6 +28,8 @@ class effect_DamageOpponent extends Effect {
     } else {
       player1HP -= dmg;
     }
+    
+    fireSFX.play();
   }
 
   public void Trigger(int slotID) {
@@ -36,6 +38,8 @@ class effect_DamageOpponent extends Effect {
     } else {
       player1HP -= dmg;
     }
+    
+    fireSFX.play();
   }
 
   public void Draw(Slot slot) {
