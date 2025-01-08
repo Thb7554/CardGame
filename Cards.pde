@@ -29,6 +29,8 @@ int ATC = 0;
 
 int mones = 0;
 
+
+
 Button startGame, editDeck, backToMenu, toSettings, fromSettings;
 enum GameStatus {
   OPENING,
@@ -87,12 +89,11 @@ int cardIDCurIndex = -1;
 
 void setup() {
   size(5, 5, P2D);
+  
   int size = 900;
-
   frameRate(60);
 
-
-  PFont pfont = createFont("SansSerif", 128);
+  PFont pfont = createFont("Arial", 32, true);
   textFont(pfont);
 
   if (!small) {

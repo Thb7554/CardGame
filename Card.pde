@@ -109,23 +109,34 @@ class Card {
   public void Draw(boolean showMana, boolean showFlavor) {
     noStroke();
     fill(0,0,0,50);
-    rect(5, 5, cardWid, cardHei);
+    rect(5, 5, cardWid, cardHei, 8);
     
-    strokeWeight(2);
+    strokeWeight(3);
     stroke(0, 0, 0);
     fill(CI.c);
-    rect(0, 0, cardWid, cardHei);
+    rect(0, 0, cardWid, cardHei, 8);
     fill(CI.cc);
     strokeWeight(1);
     
     if(img != null){
-      image(img, 0,-20,cardWid,cardWid);
+      img.resize((int)cardWid,(int)cardWid);
+      
+      image(img, 0,-10,cardWid,cardWid);
     }
 
+
+    noStroke();
+    fill(0,0,0,50);
+    rect(0,-cardHei/2+17,cardWid,19);
+    strokeWeight(3);
+    fill(CI.c);
+    rect(0,-cardHei/2+15,cardWid+4,19);
+    strokeWeight(1);
     
+    fill(CI.cc);
     textAlign(CENTER);
     textSize(16);
-    text(name, 0, -cardHei/2+15);
+    text(name, 0, -cardHei/2+20);
     
     if(smallTextArea.w != cardWid || smallTextArea.h != cardHei/3){
       smallTextArea.Resize(0,cardHei/3-35,cardWid,cardHei/3);
@@ -159,12 +170,17 @@ class Card {
 
     if(showMana){
       for (int i = 0; i < cost; i++) {
-        strokeWeight(1);
+        noStroke();
+        fill(0,0,0,50);
+        ellipse((i*16)-(cost-1)*16/2, -63+2*sin(t+i), 14,14);
         fill(CI.cc);
-        ellipse(-50+(i+1)*100/(cost+1), -70, 10, 10);
+        //ellipse(-50+(i+1)*100/(cost+1), -75, 10, 10);
+        ellipse((i*16)-(cost-1)*16/2, -65+2*sin(t+i), 14,14);
         fill(CI.c);
-        ellipse(-50+(i+1)*100/(cost+1), -70, 8, 8);
+        ellipse((i*16)-(cost-1)*16/2, -65+2*sin(t+i), 8,8);
+        //ellipse(-50+(i+1)*100/(cost+1), -75, 5, 5);
       }
+      strokeWeight(1);
     }
 
 

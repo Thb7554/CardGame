@@ -72,6 +72,7 @@ class TextArea {
     stroke(0,0,0);
     fill(255,255,255,hoverTimer);
     textSize(tSize);
+    textLeading(tSize);
     text(computedText, x-w/2+4,y-h/2+tSize*2/3+5);
     fill(0,0,0);
   }
