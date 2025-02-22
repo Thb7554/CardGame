@@ -66,7 +66,7 @@ class TextArea {
   
   public void InnerDraw(int hoverTimer){
     textAlign(LEFT);
-    fill(0,0,0,200);
+    fill(0,0,0,150);
     noStroke();
     rect(x,y,w,h);
     stroke(0,0,0);

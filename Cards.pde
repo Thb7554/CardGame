@@ -31,13 +31,18 @@ int mones = 0;
 
 
 
-Button startGame, editDeck, backToMenu, toSettings, fromSettings;
+Button startGame, editDeck, backToMenu, toSettings, fromSettings; //Menu Buttons
+Button returnToMenu;
+
+
+
 enum GameStatus {
   OPENING,
   START,
   MAIN, //Player actions
   COMBAT,
-  END
+  END,
+  RESULTS
 }
 
 enum SystemStatus {
@@ -47,9 +52,18 @@ enum SystemStatus {
   SETT
 }
 
+enum WinStatus {
+  ONGOING,
+  PLAYER1,
+  PLAYER2,
+  TIED
+}
+
 GameStatus gameStatus = GameStatus.MAIN;
 
 SystemStatus systemStatus = SystemStatus.MENU;
+
+WinStatus winStatus = WinStatus.ONGOING;
 
 int curSlot = 0;
 int curSlotMax = 5;
@@ -59,8 +73,8 @@ float t = 0;
 
 boolean turn;
 
-int player1HP = 40;
-int player2HP = 40;
+int player1HP = 10;
+int player2HP = 10;
 
 Hand player1Hand = new Hand();
 Hand player2Hand = new Hand();
@@ -132,6 +146,8 @@ void setup() {
   backToMenu = new Button("Back to Menu", true, width/2, height/2-200, 200, 50);
   toSettings = new Button("Settings", true, width/2, height/2+300,150,45);
   fromSettings = new Button("Back to Menu", true, width/2, height/2-200,200,50);
+  
+  returnToMenu = new Button("Return to Menu", true, width/2, height/2+200,250,80);
   
   String words = "start";
   String[] list = split(words, ' ');
@@ -284,6 +300,9 @@ void draw() {
     
     fromSettings.x = width/2;
     fromSettings.y = height/2-200;
+    
+    returnToMenu.x = width/2;
+    returnToMenu.y = height/2-200;
   }
   
   cardWid = baseCardWid * width/1200;
@@ -314,28 +333,14 @@ void draw() {
     
     if (mousePressed && startGame.Click()) {
       systemStatus = SystemStatus.GAME;
+      winStatus = WinStatus.ONGOING;
       StartTurn();
-      backToMenu.hidden = true;
-      startGame.hidden = true;
-      editDeck.hidden = true;
-      toSettings.hidden = true;
-      fromSettings.hidden = true;
     }
     if (mousePressed && editDeck.Click()) {
       systemStatus = SystemStatus.EDIT;
-      backToMenu.hidden = false;
-      startGame.hidden = true;
-      editDeck.hidden = true;
-      toSettings.hidden = true;
-      fromSettings.hidden = true;
     }
     if (mousePressed && toSettings.Click()) {
       systemStatus = SystemStatus.SETT;
-      backToMenu.hidden = true;
-      startGame.hidden = true;
-      editDeck.hidden = true;
-      toSettings.hidden = true;
-      fromSettings.hidden = false;
     }
 
     return;
@@ -349,11 +354,6 @@ void draw() {
     fromSettings.Draw();
     if (mousePressed && fromSettings.Click()) {
       systemStatus = SystemStatus.MENU;
-      backToMenu.hidden = true;
-      startGame.hidden = false;
-      editDeck.hidden = false;
-      toSettings.hidden = false;
-      fromSettings.hidden = true;
     }
     
     return;
@@ -368,11 +368,6 @@ void draw() {
     backToMenu.Draw();
     if (mousePressed && backToMenu.Click()) {
       systemStatus = SystemStatus.MENU;
-      backToMenu.hidden = true;
-      startGame.hidden = false;
-      editDeck.hidden = false;
-      toSettings.hidden = false;
-      fromSettings.hidden = true;
       
       ArrayList colorID = new ArrayList<Integer>();
       player1ManaList = new ArrayList<Mana>();
@@ -665,6 +660,36 @@ void draw() {
   fill(0,0,0,200);
   text(width, 40,40);
   text(height, 40,80);
+  
+  
+  if(winStatus != WinStatus.ONGOING){
+    noStroke();
+    if(winStatus == WinStatus.PLAYER2){
+      fill(0,0,200,150);
+    }
+    else if(winStatus == WinStatus.PLAYER1){
+      fill(200,0,0,150);
+    }
+    else{
+      fill(150,150,150,150);
+    }
+    
+    rect(width/2,height/2,width,height);
+  }
+  
+
+  if(gameStatus == GameStatus.RESULTS){
+    returnToMenu.hidden = false;
+    
+    returnToMenu.Draw();
+    
+    if (mousePressed && returnToMenu.Click()) {
+      returnToMenu.hidden = true;
+      systemStatus = SystemStatus.MENU;
+      gameStatus = GameStatus.MAIN;
+    }
+  }
+
 
   if (gameStatus == GameStatus.START && TriggerList.size() == 0 && AnimationList.size() == 0) {
     gameStatus = GameStatus.MAIN;

@@ -111,7 +111,7 @@ class Card {
     fill(0,0,0,50);
     rect(5, 5, cardWid, cardHei, 8);
     
-    strokeWeight(3);
+    strokeWeight(2);
     stroke(0, 0, 0);
     fill(CI.c);
     rect(0, 0, cardWid, cardHei, 8);
@@ -123,12 +123,17 @@ class Card {
       
       image(img, 0,-10,cardWid,cardWid);
     }
-
-
+    
+    strokeWeight(2);
+    stroke(0, 0, 0);
+    rect(0,-cardHei/2+21,cardWid,19);
+    
     noStroke();
     fill(0,0,0,50);
+     
     rect(0,-cardHei/2+17,cardWid,19);
-    strokeWeight(3);
+    strokeWeight(2);
+    stroke(0,0,0);
     fill(CI.c);
     rect(0,-cardHei/2+15,cardWid+4,19);
     strokeWeight(1);
@@ -171,14 +176,16 @@ class Card {
     if(showMana){
       for (int i = 0; i < cost; i++) {
         noStroke();
-        fill(0,0,0,50);
-        ellipse((i*16)-(cost-1)*16/2, -63+2*sin(t+i), 14,14);
+        fill(0,0,0,90);
+        ellipse((i*16)-(cost-1)*16/2-2, -68+2*sin(t+i)+2, 15,15);
         fill(CI.cc);
         //ellipse(-50+(i+1)*100/(cost+1), -75, 10, 10);
-        ellipse((i*16)-(cost-1)*16/2, -65+2*sin(t+i), 14,14);
+        ellipse((i*16)-(cost-1)*16/2, -68+2*sin(t+i), 14,14);
         fill(CI.c);
-        ellipse((i*16)-(cost-1)*16/2, -65+2*sin(t+i), 8,8);
+        ellipse((i*16)-(cost-1)*16/2, -68+2*sin(t+i), 8,8);
         //ellipse(-50+(i+1)*100/(cost+1), -75, 5, 5);
+        fill(255,255,255,200);
+        ellipse((i*16)-(cost-1)*16/2+2, -68+2*sin(t+i)-2, 4,4);
       }
       strokeWeight(1);
     }
