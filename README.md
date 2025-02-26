@@ -1,6 +1,4 @@
 # Card Game
-
-
 ## Controls
 
 ### Menus
@@ -40,4 +38,7 @@ Get Opponent's Life to 0.
 * Cards have Attack and Health.
 * Cards with opposite open spaces inflict damage to opponent.
 
+
 Get 100 Money on a win.
+
+![gold](https://raw.githubusercontent.com/Thb7554/CardGame/refs/heads/master/data/images/gold.png)
