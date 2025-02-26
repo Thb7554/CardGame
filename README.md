@@ -17,19 +17,19 @@
 
 ## Main Menu 
 
-### [Start Game]
+### Start Game
 First make a deck.
 
-### [Edit Deck]
+### Edit Deck
 Go here to see a catalog of all cards, click cards you like and click slots in your deck to add them.
 
 Right click will remove cards if you prefer empty slots.
 
-### [Settings]
+### Settings
 Does nothing.
 
 ## Game
-### Win condition
+### Win Condition
 Get Opponent's Life to 0.
 
 ### Mechanics
