@@ -111,12 +111,15 @@ class Card {
     fill(0,0,0,50);
     rect(5, 5, cardWid, cardHei, 8);
     
-    strokeWeight(2);
+
+    
+    strokeWeight(1); //KEEP THIS AT 1 OR SUFFER 300 LOST FRAMES
     stroke(0, 0, 0);
     fill(CI.c);
     rect(0, 0, cardWid, cardHei, 8);
     fill(CI.cc);
     strokeWeight(1);
+
     
     if(img != null){
       img.resize((int)cardWid,(int)cardWid);
@@ -173,7 +176,7 @@ class Card {
 
     fill(255);
 
-    if(showMana){
+    if(showMana){      
       for (int i = 0; i < cost; i++) {
         noStroke();
         fill(0,0,0,90);

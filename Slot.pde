@@ -97,6 +97,7 @@ class Slot {
         gameStatus = GameStatus.RESULTS;
         if(player1HP <= 0 && player2HP > 0){
         winStatus = WinStatus.PLAYER2;
+        mones += 100;
         }
         else if(player2HP <= 0 && player1HP > 0){
           winStatus = WinStatus.PLAYER1;
